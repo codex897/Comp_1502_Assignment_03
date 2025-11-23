@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="mru.tsc.controller.toyJavaFxController">
+   <center>
+      <AnchorPane prefHeight="200.0" prefWidth="739.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button layoutX="318.0" layoutY="88.0" mnemonicParsing="false" text="Button" />
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>
