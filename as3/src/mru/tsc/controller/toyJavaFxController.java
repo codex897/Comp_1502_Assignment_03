@@ -1,5 +1,14 @@
 package mru.tsc.controller;
 
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TextField;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -58,7 +67,7 @@ public class toyJavaFxController {
 		
 		toyList = toyStorageDB.getToyDB();
 		
-		startMenu();
+//		startMenu();
 		
 	}
 	
@@ -457,7 +466,7 @@ public class toyJavaFxController {
 	 * at least one of the question must be answered for the filter to work
 	 * A list of toys that was filtered is then displayed for the user to purchase
 	 */
-	private void giftSuggestion() { //WIPWIPWIPWIPWIP
+	private void giftSuggestion(String giftAge, String typeInput, String minPriceInput, String maxPriceInput ) { //WIPWIPWIPWIPWIP
 		String ageString = null; //originally was working needed null which is why we used the class name instead, but changed later, however it does not make a difference
 		Integer age = null;
 		String type = null;
@@ -468,12 +477,12 @@ public class toyJavaFxController {
 		
 		ArrayList<Toy> filteredList;
 		
-		while(true) {
+//		while(true) {
 			
-			ageString = menu.askGiftAge();
+			ageString = menu.askGiftAge(giftAge);
 			age = ageValidation(ageString);
 			
-			type =  menu.askTypeInputGift();
+			type =  menu.askTypeInputGift(typeInput);
 			if(!type.isEmpty()) {
 				if (type.equals("b")) type = "BoardGames";
 				else if (type.equals("f")) type = "Figure";
@@ -481,45 +490,49 @@ public class toyJavaFxController {
 				else if (type.equals("p")) type = "Puzzle";
 			}
 			
-			while(true) { //keep runing until minprice is less than maxprice or left blank
-				menu.pricerange();
-				minPriceString = menu.askMinPrice();
+//			while(true) { //keep runing until minprice is less than maxprice or left blank
+//				menu.pricerange();
+				minPriceString = menu.askMinPrice(minPriceInput);
 				minPrice = minPriceValidation(minPriceString);
 				
 				
-				maxPriceString = menu.askMaxPrice();
+				maxPriceString = menu.askMaxPrice(maxPriceInput);
 				maxPrice = maxPriceValidation(maxPriceString);
 			
 				if (minPrice != null && maxPrice != null && minPrice > maxPrice) {
 	                menu.displayMinMoreThanMaxError();
-	            } else break;
-			}
+	            } //else break;
+//			}
 			
 			if (ageString.isEmpty() && type.isEmpty() && minPriceString.isEmpty() && maxPriceString.isEmpty()) { //do this in the menu class
 				menu.atLeastOneFieldMessage(); // now calls the menu class
 			}
-			else break;
-		}
+			else {
+				
+				filteredList = toyStorageDB.compareTypeToAllToys(type);
+				if(type.isEmpty()) filteredList = toyList; //if the user chooses not to enter anything for the toy type, make sure filteredlist has all the toys
+				
+				filteredList = filterAge(filteredList, age);
+				filteredList = filterPrice(filteredList, minPrice, maxPrice);
+				
+				menu.displayGiftSuggestionResult(); // Now calls the menu class
+				if(filteredList.isEmpty()) { //if its empty then let user know and stop this function by returning
+					menu.toyNotFound();
+					return;
+				}
+				
+				displayToyList(filteredList);
+		//		Toy selectedToy = selectValidation(filteredList);
+		//		if(selectedToy == null) {
+		//			backToMainMenu = true;
+		//			return;
+		//		}
+		//		purchase(selectedToy);
+				
+			}
+//		}
 	
-		filteredList = toyStorageDB.compareTypeToAllToys(type);
-		if(type.isEmpty()) filteredList = toyList; //if the user chooses not to enter anything for the toy type, make sure filteredlist has all the toys
-		
-		filteredList = filterAge(filteredList, age);
-		filteredList = filterPrice(filteredList, minPrice, maxPrice);
-		
-		menu.displayGiftSuggestionResult(); // Now calls the menu class
-		if(filteredList.isEmpty()) { //if its empty then let user know and stop this function by returning
-			menu.toyNotFound();
-			return;
-		}
-		
-		displayToyList(filteredList);
-		Toy selectedToy = selectValidation(filteredList);
-		if(selectedToy == null) {
-			backToMainMenu = true;
-			return;
-		}
-		purchase(selectedToy);
+
 	
 	}
 	
@@ -651,5 +664,111 @@ public class toyJavaFxController {
 	
 
 
+	
+	
+	
+	
+	
+
+    @FXML
+    private TextField ageTF;
+
+    @FXML
+    private TextField animalMaterialTF;
+
+    @FXML
+    private TextField animalSizeTF;
+
+    @FXML
+    private TextField bgDesignersTF;
+
+    @FXML
+    private TextField bgMaxTF;
+
+    @FXML
+    private TextField bgMinTF;
+
+    @FXML
+    private TextField brandTF;
+
+    @FXML
+    private Button btnSubmit;
+
+    @FXML
+    private ComboBox<?> categoryCB;
+
+    @FXML
+    private ComboBox<?> categoryCB1;
+
+    @FXML
+    private TextField countTF;
+
+    @FXML
+    private TextField figureClassTF;
+
+    @FXML
+    private Label lblErrorGift;
+
+    @FXML
+    private ListView<?> listViewGift;
+
+    @FXML
+    private TextField nameTF;
+
+    @FXML
+    private TextField priceTF;
+
+    @FXML
+    private TextField puzzleTypeTF;
+
+    @FXML
+    private Button removeBtn;
+
+    @FXML
+    private TextField removeSerialTF;
+
+    @FXML
+    private Button saveBtn;
+
+    @FXML
+    private TextField serialTF;
+
+    @FXML
+    private Tab tabp1;
+
+    @FXML
+    private Tab tabp2;
+
+    @FXML
+    private Tab tabp3;
+
+    @FXML
+    private Tab tabp4;
+
+    @FXML
+    private TextField tfAge;
+
+    @FXML
+    private TextField tfMaxPrice;
+
+    @FXML
+    private TextField tfMinPrice;
+
+    @FXML
+    private ListView<?> toyListView;
+    @FXML
+    void submitGift(ActionEvent event) {
+    	String typeInput;
+    	//String giftAge, String typeInput, String minPriceInput, String maxPriceInput
+    	
+
+    
+    if (categoryCB1.getValue() == null) {// if its empty or user chooses none
+    		 typeInput = "";
+    }
+    else typeInput = categoryCB1.getValue().toString();
+    
+    giftSuggestion(tfAge.getText(), typeInput, tfMinPrice.getText(), tfMaxPrice.getText());
+    }
 	
 }

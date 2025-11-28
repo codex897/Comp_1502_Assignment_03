@@ -130,11 +130,11 @@
                                     <Label layoutX="20.0" layoutY="132.0" text="Age of the recipient" />
                                     <TextField fx:id="tfAge" layoutX="140.0" layoutY="127.0" prefWidth="150.0" />
                                     <Label layoutX="20.0" layoutY="182.0" text="Minimum Price" />
-                                    <TextField fx:id="nameTF1" layoutX="140.0" layoutY="177.0" prefWidth="150.0" />
+                                    <TextField fx:id="tfMinPrice" layoutX="140.0" layoutY="177.0" prefWidth="150.0" />
                                     <Label layoutX="20.0" layoutY="232.0" text="Maximum Price" />
-                                    <TextField fx:id="brandTF1" layoutX="140.0" layoutY="227.0" prefWidth="150.0" />
-                                    <Button fx:id="btnSubmit" layoutX="80.0" layoutY="430.0" prefWidth="150.0" text="Submit" />
-                                    <Label fx:id="lblError" layoutX="31.0" layoutY="372.0" prefHeight="18.0" prefWidth="250.0" text="ERROR message goes here" />
+                                    <TextField fx:id="tfMaxPrice" layoutX="140.0" layoutY="227.0" prefWidth="150.0" />
+                                    <Button fx:id="btnSubmit" layoutX="80.0" layoutY="430.0" onAction="#submitGift" prefWidth="150.0" text="Submit" />
+                                    <Label fx:id="lblErrorGift" layoutX="31.0" layoutY="372.0" prefHeight="18.0" prefWidth="250.0" text="ERROR message goes here" />
                                  </children>
                               </AnchorPane>
                               <ListView fx:id="listViewGift" layoutX="309.0" layoutY="14.0" prefHeight="520.0" prefWidth="410.0" />

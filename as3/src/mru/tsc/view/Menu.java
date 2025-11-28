@@ -56,12 +56,11 @@ public class Menu {
      * @param userType users chosen type
      * @return Toy type as String (f, a, p, b)
      */
-	public String askTypeInputGift() {
+	public String askTypeInputGift(String typeInput) {
 	    String type;
-	    System.out.print("Enter Toy Type || type [F] for figures, [A] for animal, [P] for puzzles, [B] for board-games | Press [ENTER] to leave blank: ");
 
 	    while(true) {
-	        type = input.nextLine().trim().toLowerCase();
+	        type = typeInput.trim().toLowerCase();
 
 	        // Check if user pressed Enter (empty input)
 	        if (type.isEmpty()) {
@@ -569,10 +568,9 @@ public class Menu {
 	 * Ask the user for an age filter for the gift suggestion.
 	 * @return String entered by the user (can be empty if skipped)
 	 */
-	public String askGiftAge() {
-		System.out.println("");
-	    System.out.print("For what age? | Press [ENTER] to leave blank: ");
-	    return input.nextLine().trim();
+	public String askGiftAge(String age) {
+
+	    return age.trim();
 	}
 
 	/**
@@ -589,20 +587,18 @@ public class Menu {
 	 * Ask the user for minimum price (optional).
 	 * @return String entered by the user (can be empty if skipped)
 	 */
-	public String askMinPrice() {
-		System.out.println("");
-	    System.out.print("Enter minimum price | Press [ENTER] to leave blank: ");
-	    return input.nextLine().trim();
+	public String askMinPrice(String minPriceInput) {
+
+	    return minPriceInput.trim();
 	}
 
 	/**
 	 * Asks the user for maximum price (optional).
 	 * @return String entered by the user (can be empty if skipped)
 	 */
-	public String askMaxPrice() {
-		System.out.println("");
-	    System.out.print("Enter maximum price | Press [ENTER] to leave blank: ");
-	    return input.nextLine().trim();
+	public String askMaxPrice(String maxPriceInput) {
+
+	    return maxPriceInput.trim();
 	}
 
 	/**
