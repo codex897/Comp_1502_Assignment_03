@@ -8,7 +8,7 @@ import mru.tsc.exceptions.NegativePriceException;
 import mru.tsc.model.*;
 import mru.tsc.view.Menu;
 
-public class toyJavaFxController {
+public class ToyStoreManager {
 
 	/**
 	 * This field contains a list of the toy object from the data base
@@ -46,7 +46,7 @@ public class toyJavaFxController {
 	 * It also initializes the ToyStorageDb class and calls to load the data into an arraylist
 	 * This also starts the program by calling the main menu.
 	 */
-	public toyJavaFxController() {
+	public ToyStoreManager() {
 		this.input = new Scanner(System.in); //probably temporaryr
 		error = new NegativePriceException();
 		menu = new Menu();
