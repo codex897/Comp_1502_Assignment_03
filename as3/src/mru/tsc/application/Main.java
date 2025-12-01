@@ -2,6 +2,7 @@ package mru.tsc.application;
 	
 import javafx.application.Application;
 import javafx.stage.Stage;
+import mru.tsc.controller.ToyStoreManager;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.fxml.FXMLLoader;
@@ -23,5 +24,6 @@ public class Main extends Application {
 	
 	public static void main(String[] args) {
 		launch(args);
+//		ToyStoreManager start = new ToyStoreManager();
 	}
 }

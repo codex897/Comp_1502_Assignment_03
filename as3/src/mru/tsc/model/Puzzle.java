@@ -77,11 +77,14 @@ public class Puzzle extends Toy {
 	public String stringToFormat() {
 		return super.stringToFormat() + ";" + type;
 	}
-	
+
+	/**
+	 * Returns a simple string version of this puzzle’s details.
+	 * 
+	 * @return a string showing the puzzle type
+	 */
 	@Override
 	public String toString() {
-	    return super.toString()
-	            + ", Puzzle type: " + type;
+	    return super.toString() + ", Type: " + type ;
 	}
-
 }

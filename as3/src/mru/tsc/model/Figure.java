@@ -73,11 +73,14 @@ public class Figure extends Toy {
 	public String stringToFormat() {
 		return super.stringToFormat() + ";" + classification;
 	}
-	
+
+	/**
+	 * Returns a simple string version of this figure’s information.
+	 * 
+	 * @return a string that includes the classification type
+	 */
 	@Override
 	public String toString() {
-	    return super.toString()
-	            + ", Classification: " + classification;
+	    return super.toString() + ", Classification " + classification;
 	}
-
 }

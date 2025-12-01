@@ -1,16 +1,5 @@
 package mru.tsc.controller;
 
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TextField;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
-
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -19,10 +8,8 @@ import mru.tsc.exceptions.NegativePriceException;
 import mru.tsc.model.*;
 import mru.tsc.view.Menu;
 
-public class toyJavaFxController {
+public class ToyStoreManager {
 
-	ArrayList<Toy> filteredList;
-	
 	/**
 	 * This field contains a list of the toy object from the data base
 	 */
@@ -59,7 +46,7 @@ public class toyJavaFxController {
 	 * It also initializes the ToyStorageDb class and calls to load the data into an arraylist
 	 * This also starts the program by calling the main menu.
 	 */
-	public toyJavaFxController() {
+	public ToyStoreManager() {
 		this.input = new Scanner(System.in); //probably temporaryr
 		error = new NegativePriceException();
 		menu = new Menu();
@@ -67,12 +54,14 @@ public class toyJavaFxController {
 		toyStorageDB =  new ToyStorageDB(FILE_PATH);
 		toyStorageDB.addData();
 		
+
+		
 		toyList = toyStorageDB.getToyDB();
 		
-//		startMenu();
+		startMenu();
 		
 	}
-
+	
 	/**
 	 * This method starts the program and calls for to prompt the main menu that loops until the user chooses to exit
 	 * Additionally, it resets the backToMainMenu field to false to ensure that the user can go to the sub-menu
@@ -400,8 +389,6 @@ public class toyJavaFxController {
 	 * @return the toy object that the user selected
 	 */
 	private Toy selectValidation (ArrayList<Toy> searchedList) {
-		
-		
 		int userSelectionInput;
 		int maxSearchedListSize = searchedList.size(); // check the size of the list, that will be the maximum number the user can input
 		
@@ -429,7 +416,7 @@ public class toyJavaFxController {
 		if (toy.getCount() > 0) { 
 			toy.toyDecrement(); //if theres at least one toy available and the user wants to purchase then remove one count from the DB
 			menu.purchaseSuccess(); // now calls the menu class
-			
+			menu.pressEnter();
 		}
 		else menu.outOfStock();// now calls the menu class
 	}
@@ -440,12 +427,12 @@ public class toyJavaFxController {
 	 * @param searchedList the list containing the toys in the database as an ArrayList Class
 	 */
 	private void displayToyList(ArrayList<Toy> searchedList) {
-		listViewGift.getItems().clear();
+		
 		int count = 0;
 		for (Toy toy : searchedList) {
 			count ++;
 			//There should be a menu call here that takes in count
-			listViewGift.getItems().add(toy.toString());
+			
 			menu.displaytoylist(count, toy.toString());
 
 		}
@@ -470,7 +457,7 @@ public class toyJavaFxController {
 	 * at least one of the question must be answered for the filter to work
 	 * A list of toys that was filtered is then displayed for the user to purchase
 	 */
-	private void giftSuggestion(String giftAge, String typeInput, String minPriceInput, String maxPriceInput ) { //WIPWIPWIPWIPWIP
+	private void giftSuggestion() { //WIPWIPWIPWIPWIP
 		String ageString = null; //originally was working needed null which is why we used the class name instead, but changed later, however it does not make a difference
 		Integer age = null;
 		String type = null;
@@ -479,15 +466,14 @@ public class toyJavaFxController {
 		String maxPriceString = null;
 		Double maxPrice = null;
 		
+		ArrayList<Toy> filteredList;
 		
-		if (filteredList != null )filteredList.clear();
-		
-//		while(true) {
+		while(true) {
 			
-			ageString = menu.askGiftAge(giftAge);
+			ageString = menu.askGiftAge();
 			age = ageValidation(ageString);
 			
-			type =  menu.askTypeInputGift(typeInput);
+			type =  menu.askTypeInputGift();
 			if(!type.isEmpty()) {
 				if (type.equals("b")) type = "BoardGames";
 				else if (type.equals("f")) type = "Figure";
@@ -495,54 +481,45 @@ public class toyJavaFxController {
 				else if (type.equals("p")) type = "Puzzle";
 			}
 			
-//			while(true) { //keep runing until minprice is less than maxprice or left blank
-//				menu.pricerange();
-				minPriceString = menu.askMinPrice(minPriceInput);
+			while(true) { //keep runing until minprice is less than maxprice or left blank
+				menu.pricerange();
+				minPriceString = menu.askMinPrice();
 				minPrice = minPriceValidation(minPriceString);
 				
 				
-				maxPriceString = menu.askMaxPrice(maxPriceInput);
+				maxPriceString = menu.askMaxPrice();
 				maxPrice = maxPriceValidation(maxPriceString);
 			
 				if (minPrice != null && maxPrice != null && minPrice > maxPrice) {
-					listViewGift.getItems().clear();
-					lblErrorGift.setText("Error: minimum price cannot be greater than the maximum price.");
 	                menu.displayMinMoreThanMaxError();
-	            } //else break;
-//			}
+	            } else break;
+			}
 			
 			if (ageString.isEmpty() && type.isEmpty() && minPriceString.isEmpty() && maxPriceString.isEmpty()) { //do this in the menu class
-				lblErrorGift.setText("ERROR: at least one field must be filled out");
-
 				menu.atLeastOneFieldMessage(); // now calls the menu class
 			}
-			else {
-				
-				filteredList = toyStorageDB.compareTypeToAllToys(type);
-				if(type.isEmpty()) filteredList = toyList; //if the user chooses not to enter anything for the toy type, make sure filteredlist has all the toys
-				
-				filteredList = filterAge(filteredList, age);
-				filteredList = filterPrice(filteredList, minPrice, maxPrice);
-				
-				menu.displayGiftSuggestionResult(); // Now calls the menu class
-				if(filteredList.isEmpty()) { //if its empty then let user know and stop this function by returning
-					menu.toyNotFound();
-					listViewGift.getItems().clear();
-					return;
-				}
-				
-				displayToyList(filteredList);
-//				Toy selectedToy = selectValidation(filteredList);
-		//		if(selectedToy == null) {
-		//			backToMainMenu = true;
-		//			return;
-		//		}
-		//		purchase(selectedToy);
-				
-			}
-//		}
+			else break;
+		}
 	
-
+		filteredList = toyStorageDB.compareTypeToAllToys(type);
+		if(type.isEmpty()) filteredList = toyList; //if the user chooses not to enter anything for the toy type, make sure filteredlist has all the toys
+		
+		filteredList = filterAge(filteredList, age);
+		filteredList = filterPrice(filteredList, minPrice, maxPrice);
+		
+		menu.displayGiftSuggestionResult(); // Now calls the menu class
+		if(filteredList.isEmpty()) { //if its empty then let user know and stop this function by returning
+			menu.toyNotFound();
+			return;
+		}
+		
+		displayToyList(filteredList);
+		Toy selectedToy = selectValidation(filteredList);
+		if(selectedToy == null) {
+			backToMainMenu = true;
+			return;
+		}
+		purchase(selectedToy);
 	
 	}
 	
@@ -600,16 +577,11 @@ public class toyJavaFxController {
 			try {
 			  	age = Integer.parseInt(ageString); //return this value unless invalid return max to get all toys
 			  	if (age <= 0) {
-			  		listViewGift.getItems().clear();
-			  		lblErrorGift.setText("Invalid Input: setting age field as default");
 			  		menu.invalidMessage("setting age field as default"); //empty means all there is not age limit
 			  		age = Integer.MAX_VALUE;
 			  	}
 
 			} catch (Exception e) {
-				listViewGift.getItems().clear();
-		  		lblErrorGift.setText("Invalid Input: setting age field as empty");
-
 				menu.invalidMessage("setting age field as empty");
 			}
 		}
@@ -635,15 +607,11 @@ public class toyJavaFxController {
 				menu.checkNegativePrice(minPrice);
 			} 
 			catch (NegativePriceException e) {
-				listViewGift.getItems().clear();
-				lblErrorGift.setText("Invalid Input: Cannot be negative number, seeting  field to default");
 				menu.invalidMessage(" Cannot be negative number, seeting  field to default");
 				minPrice = 0.0;
 				//just set to zero if its a negative doesnt make a difference
 			}
 			catch (Exception e) {
-				listViewGift.getItems().clear();
-				lblErrorGift.setText("Invalid Input: invalid minimum price, setting field as empty");
 				menu.invalidMessage("invalid minimum price, setting field as empty");
 
 			}
@@ -670,16 +638,10 @@ public class toyJavaFxController {
 				menu.checkNegativePrice(maxPrice);
 			}
 			catch (NegativePriceException e) {
-				listViewGift.getItems().clear();
-				lblErrorGift.setText("Invalid Input: Cannot be negative number, seeting  field to default");
-
 				menu.invalidMessage(" Cannot be negative number, seeting  field to default");
 				
 			}
 			catch (Exception e) {
-				listViewGift.getItems().clear();
-				lblErrorGift.setText("Invalid Input: setting field as empty");
-
 				menu.invalidMessage(" setting field as empty");
 			}	
 		}
@@ -687,361 +649,7 @@ public class toyJavaFxController {
 		return maxPrice;
 	}
 	
+
+
 	
-    // ===================== FXML FIELDS (FROM SCENE BUILDER) =====================
-
-    @FXML
-    private TextField ageTF;
-
-    @FXML
-    private TextField animalMaterialTF;
-
-    @FXML
-    private TextField animalSizeTF;
-
-    @FXML
-    private TextField bgDesignersTF;
-
-    @FXML
-    private TextField bgMaxTF;
-
-    @FXML
-    private TextField bgMinTF;
-
-    @FXML
-    private TextField brandTF;
-
-    @FXML
-    private Button btnSubmit;
-
-    @FXML
-    private ComboBox<String> categoryCB;
-
-    @FXML
-    private ComboBox<?> categoryCB1;
-
-    @FXML
-    private TextField countTF;
-
-    @FXML
-    private TextField figureClassTF;
-
-    @FXML
-    private Label lblErrorGift;
-
-    @FXML
-    private ListView<String> listViewGift;
-
-    @FXML
-    private TextField nameTF;
-
-    @FXML
-    private TextField priceTF;
-
-    @FXML
-    private TextField puzzleTypeTF;
-
-    @FXML
-    private Button removeBtn;
-
-    @FXML
-    private TextField removeSerialTF;
-
-    @FXML
-    private Button saveBtn;
-
-    @FXML
-    private TextField serialTF;
-
-    @FXML
-    private Tab tabp1;
-
-    @FXML
-    private Tab tabp2;
-
-    @FXML
-    private Tab tabp3;
-
-    @FXML
-    private Tab tabp4;
-
-    @FXML
-    private TextField tfAge;
-
-    @FXML
-    private TextField tfMaxPrice;
-
-    @FXML
-    private Button btnpurchase;
-    
-    @FXML
-    private TextField tfMinPrice;
-
-    @FXML
-    private ListView<String> toyListView;
-
-    // ========= HOME TAB CONTROLS (ADDED) =========
-
-    /** Radio button option to search by serial number on the Home tab. */
-    @FXML
-    private RadioButton rbSerial;
-
-    /** Radio button option to search by name on the Home tab. */
-    @FXML
-    private RadioButton rbName;
-
-    /** Radio button option to search by type on the Home tab. */
-    @FXML
-    private RadioButton rbType;
-
-    /** Text field for entering the serial number search on the Home tab. */
-    @FXML
-    private TextField txtSerialHome;
-
-    /** Text field for entering the name search on the Home tab. */
-    @FXML
-    private TextField txtNameHome;
-
-    /** Text field for entering the type search on the Home tab. */
-    @FXML
-    private TextField txtTypeHome;
-
-    /** Button for searching on the Home tab. */
-    @FXML
-    private Button btnSearchHome;
-
-    /** Button for clearing search fields on the Home tab. */
-    @FXML
-    private Button btnClearHome;
-
-    /** Button for buying a selected toy on the Home tab. */
-    @FXML
-    private Button btnBuy;
-
-    /** List view that displays toys on the Home tab. */
-    @FXML
-    private ListView<String> listViewHome; //kokokko
-    private ArrayList<Toy> homeSearchList;
-    
-    
-    
-	
-    @FXML
-    private void initialize() {
-        // Existing Gift tab combo-box setup
-        categoryCB.getItems().addAll("Animal", "BoardGames", "Figure", "Puzzle", "");
-        categoryCB.setValue("");
-
-        // ========= HOME TAB INITIAL SETUP =========
-        // Show all toys in the Home list view when the GUI starts
-        if (toyList != null && listViewHome != null) {
-            listViewHome.getItems().clear();
-            homeSearchList = new ArrayList<Toy>();
-
-            for (Toy toy : toyList) {
-                listViewHome.getItems().add(toy.toString());
-                homeSearchList.add(toy);
-            }
-        }
-    }
-
-    @FXML
-    void submitGift(ActionEvent event) {
-    	String typeInput;
-    	//String giftAge, String typeInput, String minPriceInput, String maxPriceInput
-    	
-    
-        if (categoryCB.getValue() == null) {
-        	// if its empty or user chooses none
-    		typeInput = "";
-        }
-        else typeInput = categoryCB.getValue().toString();
-    
-        giftSuggestion(tfAge.getText(), typeInput, tfMinPrice.getText(), tfMaxPrice.getText());
-    }
-    
-    @FXML
-    void purchaseThis(ActionEvent event) {
-    	Toy selectedToy =null;
-    	int selected =listViewGift.getSelectionModel().getSelectedIndex();
-    	try {
-    		 selectedToy = filteredList.get(selected);
-		} catch (IndexOutOfBoundsException e) {
-			lblErrorGift.setText("Error: no items selected");
-			System.out.println("Error: no items selected");
-			return;
-			
-		} catch (NullPointerException e) {
-			lblErrorGift.setText("Error: no items selected");
-
-			System.out.println("Error: no items selected");
-			return;
-		}
-    
-    	purchase(selectedToy);
-    	toyStorageDB.saveData();
-    	submitGift(event);
-    	
-    }
-    
-    /**
-     * Handles the Search button on the Home tab.
-     *
-     * This method reuses the same logic as the console program:
-     * - If "Serial Number" is selected, it searches using compareSNToAllToys.
-     * - If "Name" is selected, it searches using compareNameToAllToys.
-     * - If "Type" is selected, it converts F/A/P/B to the full type
-     *   and searches using compareTypeToAllToys.
-     *
-     * The results are stored in homeSearchList and displayed in the
-     * Home tab list view as strings from Toy.toString().
-     *
-     * @param event the ActionEvent generated by clicking the Search button
-     */
-    @FXML
-    private void onSearchHome(ActionEvent event) {
-
-        // Clear old results
-        listViewHome.getItems().clear();
-        homeSearchList = new ArrayList<Toy>();
-
-        ArrayList<Toy> snList;
-
-        // === Search by Serial Number ===
-        if (rbSerial.isSelected()) {
-            String userSerialNumber = txtSerialHome.getText().trim();
-            if (userSerialNumber.isEmpty()) {
-                // same idea as console: just warn and stop
-                menu.invalidMessage("Serial Number field is empty");
-                return;
-            }
-
-            snList = toyStorageDB.compareSNToAllToys(userSerialNumber);
-
-            if (snList.isEmpty()) {
-                menu.toyNotFound();
-                return;
-            }
-
-            homeSearchList = snList;
-        }
-
-        // === Search by Name ===
-        else if (rbName.isSelected()) {
-            String toyName = txtNameHome.getText().trim();
-            if (toyName.isEmpty()) {
-                menu.invalidMessage("Name field is empty");
-                return;
-            }
-
-            snList = toyStorageDB.compareNameToAllToys(toyName);
-
-            if (snList.isEmpty()) {
-                menu.toyNotFound();
-                return;
-            }
-
-            homeSearchList = snList;
-        }
-
-        // === Search by Type ===
-        else if (rbType.isSelected()) {
-            String toyType = txtTypeHome.getText().trim().toLowerCase();
-            if (toyType.isEmpty()) {
-                menu.invalidMessage("Type field is empty");
-                return;
-            }
-
-            // Same mapping as findUsingType in ToyStoreManager
-            if (toyType.equals("b")) toyType = "BoardGames";
-            else if (toyType.equals("f")) toyType = "Figure";
-            else if (toyType.equals("a")) toyType = "Animal";
-            else if (toyType.equals("p")) toyType = "Puzzle";
-
-            snList = toyStorageDB.compareTypeToAllToys(toyType);
-
-            if (snList.isEmpty()) {
-                menu.toyNotFound();
-                return;
-            }
-
-            homeSearchList = snList;
-        }
-
-        // Show whatever is in homeSearchList in the Home ListView
-        for (Toy toy : homeSearchList) {
-            listViewHome.getItems().add(toy.toString());
-        }
-    }
-
-
-    /**
-     * Handles the Clear button on the Home tab.
-     *
-     * This method clears the three search text fields and repopulates
-     * the Home list view with the full toy list from toyList.
-     *
-     * @param event the ActionEvent generated by clicking the Clear button
-     */
-    @FXML
-    private void onClearHome(ActionEvent event) {
-        // Clear text fields
-        txtSerialHome.clear();
-        txtNameHome.clear();
-        txtTypeHome.clear();
-
-        // Reset search list to all toys
-        listViewHome.getItems().clear();
-        homeSearchList = new ArrayList<Toy>();
-
-        for (Toy toy : toyList) {
-            listViewHome.getItems().add(toy.toString());
-            homeSearchList.add(toy);
-        }
-    }
-
-
-    /**
-     * Handles the Buy button on the Home tab.
-     *
-     * This method:
-     *  - Gets the selected row in the Home list view
-     *  - Uses homeSearchList to find the matching Toy object
-     *  - Calls the existing purchase(Toy) method
-     *  - Saves the data back to the file using toyStorageDB.saveData()
-     *  - Refreshes the Home list view to reflect updated counts
-     *
-     * @param event the ActionEvent generated by clicking the Buy button
-     */
-    @FXML
-    private void onBuy(ActionEvent event) {
-
-        int selectedIndex = listViewHome.getSelectionModel().getSelectedIndex();
-
-        if (selectedIndex < 0) {
-            // No selection
-            menu.invalidMessage("No toy selected to purchase");
-            return;
-        }
-
-        if (homeSearchList == null || selectedIndex >= homeSearchList.size()) {
-            menu.invalidMessage("Selected index is out of range");
-            return;
-        }
-
-        // Get the Toy the user chose
-        Toy selectedToy = homeSearchList.get(selectedIndex);
-
-        // Reuse your existing purchase logic from the console version
-        purchase(selectedToy);
-
-        // Save changes to the file
-        toyStorageDB.saveData();
-
-        // Refresh the Home list so the new stock count shows
-        listViewHome.getItems().clear();
-        for (Toy toy : homeSearchList) {
-            listViewHome.getItems().add(toy.toString());
-        }
-    }
 }

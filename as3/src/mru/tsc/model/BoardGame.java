@@ -114,12 +114,13 @@ public class BoardGame extends Toy {
 		return super.stringToFormat() + ";" + minPlayers + "-" + maxPlayers + ";" + designers;
 	}
 	
+	/**
+	 * Returns a simple text version of this board game's details.
+	 * 
+	 * @return a string showing player counts and designer names
+	 */
 	@Override
 	public String toString() {
-	    return super.toString()
-	            + ", Minimum players: " + minPlayers
-	            + ", Maximum players: " + maxPlayers
-	            + ", Designers: " + designers;
+	    return super.toString() + ", Minimum players: " + minPlayers + ", Maximum players: " + maxPlayers + ", designers: " + designers;
 	}
-
 }

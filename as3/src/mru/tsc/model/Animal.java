@@ -96,12 +96,15 @@ public class Animal extends Toy {
 	public String stringToFormat() {
 		return super.stringToFormat() + ";" + material + ";" + size;
 	}
-	
+
+	/**
+	 * Returns a string representation of the animal toy, including its material 
+	 * and size.
+	 * 
+	 * @return a string representation of the animal toy
+	 */
 	@Override
 	public String toString() {
-	    return super.toString()
-	            + ", Material: " + material
-	            + ", Size: " + size;
+	    return super.toString() + ", material: " + material + ", size: " + size;
 	}
-
 }

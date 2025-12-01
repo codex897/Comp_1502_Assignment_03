@@ -1,13 +1,13 @@
-2835360879;Cow;Game Assassin;19.52;2;7;Plastic;M
+2835360879;Cow;Game Assassin;19.52;3;7;Plastic;M
 8616804705;Mikado;Game Pixel;9.32;9;9;1-4;Haniya Woodley
-3066990646;Horse;Gamescape;165.61;1;7;Wooden;L
+3066990646;Horse;Gamescape;165.61;0;7;Wooden;L
 5726898779;Pocket Cube;Game Orc;42.83;1;4;M
 3015547049;Dove;Game Zombie;24.55;2;9;Wooden;S
-1147205649;Ninja Turtles;Gamezoid;46.15;10;6;A
+1147205649;Ninja Turtles;Gamezoid;46.15;9;6;A
 4863437054;Logic puzzle;Game Shadow;265.62;11;4;T
-6114587612;Morpion solitaire;Game Rush;47.89;5;6;L
+6114587612;Morpion solitaire;Game Rush;47.89;4;6;L
 4774316121;Snake cube;Game Sensor;184.21;9;3;C
-9074383778;Blue Max;Gamearo;199.37;11;2;1-3;Rojin Poole
+9074383778;Blue Max;Gamearo;199.37;4;2;1-3;Rojin Poole
 4084960372;Sudoku;Game Shadow;264.27;5;6;L
 6602785768;Chess puzzle;Gameara;19.44;13;5;M
 6019930308;Tsumeshogi;Game Rush;250.13;7;2;M
@@ -21,7 +21,7 @@
 7235647474;13 Dead End Drive;Game Assassin;55.18;10;9;1-8;Emeli Davis
 6045331143;Computer puzzle game;Game Survival;98.77;13;4;T
 5645765685;Ball-in-a-maze puzzle;Game Zombie;206.65;9;2;C
-8947640910;Exploding Kittens;Game Pixel;73.07;9;3;2-4;Haniya Woodley,Ruairidh Larsen
+8947640910;Exploding Kittens;Game Pixel;73.07;6;3;2-4;Haniya Woodley,Ruairidh Larsen
 1167480102;Transformers;Game Zombie;9.41;10;9;H
 9258568559;Jenga;Game Reboot;49.34;10;7;2-7;Maryam Mcdonnell,Shanaya Walter
 2804598463;Kangaroo;Gamefluent;289.37;14;6;Wooden;S
@@ -35,7 +35,6 @@
 6596226544;Rattle puzzle;Gameara;43.21;5;8;T
 1731377211;Groovy Girls;Game Loop;80.66;3;5;H
 8934865506;Djambi;Game Shadow;78.76;3;6;2-6;T-Jay Harper,Marshall Swanson
-7393662390;Star Wars Tactics;Game Loop;3.44;2;2;1-5;Ruairidh Larsen
 9399563748;Monopoly;Game Survival;47.52;4;3;2-5;Usama Salas
 4831187177;Tiling puzzle;Game Rush;85.60;1;6;L
 1772751359;Teddy bear;Game Reboot;221.46;8;3;H
@@ -82,7 +81,7 @@
 2797548530;Mouse;Gameara;14.53;14;5;Fabric;L
 7586140827;Battle Sheep;Game Sensor;266.57;14;9;2-5;Shakeel Mcintyre
 3690664040;Turtle;Game Sensor;223.01;13;8;Fabric;M
-7001540358;Ghettopoly;Gamen;7.35;10;5;2-5;T-Jay Harper
+7001540358;Ghettopoly;Gamen;7.35;8;5;2-5;T-Jay Harper
 5882978986;Latin square;Game Rush;130.74;3;2;L
 9493833470;Ludo;Game Mafia;145.95;14;6;1-5;Osian Hendricks,Ayva Gibbs
 7397838299;Axis & Allies;Game Mach;6.98;7;6;1-8;Maryam Mcdonnell,Yu Zimmerman
@@ -111,7 +110,7 @@
 1200457201;Isaac Newton;Gamen;0.33;11;3;H
 8840576104;Tsuro of the Seas;Game Sensor;175.98;6;2;1-4;Axel Johnson
 0298753495;Parian doll;Game Buff;206.13;1;9;A
-5102451719;Three-cottage problem;Game Shadow;33.79;6;10;C
+5102451719;Three-cottage problem;Game Shadow;33.79;7;10;C
 1128983567;American Girl;Game Shadow;14.22;5;8;A
 6736127390;Globe puzzle;Gamescape;82.67;12;6;M
 8999104279;Blokus;Gamearo;76.78;11;10;2-6;Kerrie Escobar
@@ -129,7 +128,7 @@
 5637161167;Kakuro;Gamearo;0.33;14;5;M
 6957748827;Rubik's Revenge;Game Loop;73.88;13;9;C
 9108635194;Spy Alley;Game Orc;29.47;1;4;2-4;Rhiann Worthington,Milla Baxter
-8076566788;Star Wars Epic Duels;Game Reboot;285.25;14;9;2-3;Troy Mcbride
+8076566788;Star Wars Epic Duels;Game Reboot;285.25;13;9;2-3;Troy Mcbride
 2342281667;Lion;Game Throne;14.07;14;10;Wooden;M
 8573975959;War on Terror;Game Survival;104.63;7;9;2-7;Maryam Mcdonnell,Osian Hendricks
 0496522522;Anatomically correct doll;Game Rush;171.46;13;8;H
@@ -156,7 +155,7 @@
 2113996461;Panda;Game Sensor;254.38;4;6;Plastic;L
 7824482027;The Farming Game;Game Throne;174.14;13;4;1-7;Miller Knights,Maryam Mcdonnell
 5236873244;T puzzle;Game Loop;222.76;13;9;L
-3412976858;Puppy;Game Mach;10.89;6;6;Wooden;S
+3412976858;Puppy;Game Mach;10.89;4;6;Wooden;S
 7703281617;Shogun/Samurai Swords;Game Demon;90.75;12;8;1-3;Shakeel Mcintyre,Shakeel Mcintyre
 4319739200;Peg solitaire;Gamearo;53.23;8;2;M
 4796227955;Matchstick puzzle;Game Survival;126.86;9;5;M
@@ -178,7 +177,7 @@
 2857921221;Fox;Game Mafia;46.52;4;10;Plastic;L
 7187309492;Risk;Game Sky;70.42;10;8;1-6;Osian Hendricks
 4771103439;Rebus;Gamegenix;64.81;9;5;M
-6853280706;Happy Cube;Gamegenix;77.68;6;4;M
+6853280706;Happy Cube;Gamegenix;77.68;7;4;M
 1559749393;Star Wars;Game Demon;97.22;3;8;H
 4464788387;Soma cube;Gamefluent;68.23;12;8;L
 2029859334;Goat;Game Shadow;121.91;11;5;Plastic;L
@@ -191,10 +190,10 @@
 8793598849;Eclipse;Game Sky;50.61;6;7;1-5;Shakeel Mcintyre
 5905553294;Alpha Triangle;Game Mafia;17.55;13;6;T
 1661435290;Voodoo doll;Game Loop;198.63;3;4;A
-9163940865;Blood Feud in New York;Game Mafia;25.48;12;5;2-4;Rojin Poole
+9163940865;Blood Feud in New York;Game Mafia;25.48;8;5;2-4;Rojin Poole
 8497620960;Diplomacy;Game Sensor;58.25;7;10;1-3;Harpreet Reilly,Axel Johnson
 7344775739;Coppit;Game Buff;250.19;9;2;2-8;Mylie Campbell
-3015093594;Horse;Gamefluent;63.69;2;2;Plastic;S
+3015093594;Horse;Gamefluent;63.69;0;2;Plastic;S
 3679935385;Kitten;Game Mafia;21.00;5;5;Fabric;L
 3315715666;owl;Gamearo;191.76;13;6;Fabric;L
 1024162826;Japanese traditional dolls;Game Demon;139.99;12;7;H
@@ -209,14 +208,14 @@
 1672553954;Queen Victoria;Game Mafia;18.29;2;6;A
 5248837254;Lock puzzle;Game Sky;32.29;5;2;M
 7691410700;Hey, That's My Fish!;Game Buff;293.78;9;4;1-7;Barney Lugo
-2629048960;Ducks;Gamezoid;47.43;1;6;Fabric;S
+2629048960;Ducks;Gamezoid;47.43;0;6;Fabric;S
 5247156109;Verbal arithmetic;Gameado;8.29;11;9;M
 7935086963;StarCraft: The Board Game;Gameado;50.81;5;7;1-8;Emeli Davis
 4585852723;Tsumego;Game Sky;292.41;7;8;M
 9514194360;King Oil;Game Loop;9.65;12;7;2-4;Haniya Woodley
 5279323659;Einstein's Puzzle;Game Demon;182.61;3;6;T
 4134304987;Pentomino;Game Reboot;59.30;9;8;L
-8085889603;1313 Dead End Drive;Game Zombie;43.54;9;10;1-5;Marshall Swanson,Mylie Campbell
+8085889603;1313 Dead End Drive;Game Zombie;43.54;10;10;1-5;Marshall Swanson,Mylie Campbell
 3737738613;Deer;Game Pixel;182.28;5;8;Fabric;L
 7596463022;Strange Synergy;Gamefluent;80.41;6;7;1-7;Milla Baxter,Harpreet Reilly
 3337731148;Rabbit;Gameado;63.90;12;7;Fabric;S
@@ -225,3 +224,5 @@
 4662861666;Acrostic;Game Pixel;70.84;11;9;T
 1111111111;abcd;abcd;222222.00;1212;99;A
 7777777777;abcd;abcd;1212.00;121212;12;12-23;Steve Jobs, Pikachu
+7777777778;blood;hasbruh;67.00;67;67;41-67;bruv, blud
+1111111133;w;w;12.00;1;1;H

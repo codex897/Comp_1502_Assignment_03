@@ -1,7 +1,9 @@
 package mru.tsc.model;
 
 
+import mru.tsc.view.*;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -25,7 +27,7 @@ import java.util.Scanner;
  * @course CIS 2230 - Mount Royal University
  */
 public class ToyStorageDB {
-
+	Menu menu;
 	ArrayList<Toy> toydb;
 	private String FILE_PATH;
 
@@ -36,8 +38,8 @@ public class ToyStorageDB {
 	 * @param FILE_PATH the file path to the toy data file
 	 * @throws Exception if an error occurs while setting up the file
 	 */
-	public ToyStorageDB(String FILE_PATH) throws Exception {
-
+	public ToyStorageDB(String FILE_PATH)  {
+		menu = new Menu();
 		toydb = new ArrayList<>(); // Ensure toydb is initialized
 		this.FILE_PATH = FILE_PATH;
 
@@ -55,40 +57,48 @@ public class ToyStorageDB {
 	 * 
 	 * @throws Exception if the file cannot be found or read properly
 	 */
-	public void addData() throws Exception {
+	public void addData()  {
 		File toyfile = new File(FILE_PATH);
 		String currentLine;
 		String[] splittedLine;
-
+		Scanner fileReader;
 		if (toyfile.exists()) { // Checking if the file exists
-			Scanner fileReader = new Scanner(toyfile); // Create scanner for the file
-
-			while (fileReader.hasNextLine()) { // Loop through the file lines
-				currentLine = fileReader.nextLine();
-				splittedLine = currentLine.split(";"); // Split the line at semi-colons
-				
-				
-				String toyType = getToyType(splittedLine[0]);
-				
-				if(toyType.equals("Figure")) { //takes in the serial number and checks for specific type of toy
-					createFigure(splittedLine);
-				}
-				
-				else if(toyType.equals("Animal") ){ //takes in the serial number and checks for specific type
-					createAnimal(splittedLine);
-				}
-				
-				else if(toyType.equals("Puzzle") ){ //takes in the serial number and checks for specific type
-					createPuzzle(splittedLine);
-				}
-				
-				else if(toyType.equals("BoardGame") ){ //takes in the serial number and checks for specific type
-					createBoardGame(splittedLine);
-				}
-				
-			}
 			
-			fileReader.close(); // Close the file reader
+			try {
+				fileReader = new Scanner(toyfile);// Create scanner for the file
+				while (fileReader.hasNextLine()) { // Loop through the file lines
+					currentLine = fileReader.nextLine();
+					splittedLine = currentLine.split(";"); // Split the line at semi-colons
+
+//					Toy currentToy; // Change type to Toy
+					
+					
+					String toyType = getToyType(splittedLine[0]);
+					
+					if(toyType.equals("Figure")) { //takes in the serial number and checks for specific type of toy
+						createFigure(splittedLine);
+					}
+					
+					else if(toyType.equals("Animal") ){ //takes in the serial number and checks for specific type
+						createAnimal(splittedLine);
+					}
+					
+					else if(toyType.equals("Puzzle") ){ //takes in the serial number and checks for specific type
+						createPuzzle(splittedLine);
+					}
+					
+					else if(toyType.equals("BoardGame") ){ //takes in the serial number and checks for specific type
+						createBoardGame(splittedLine);
+					}
+					
+				}
+				
+				fileReader.close(); // Close the file reader
+				
+			} catch (FileNotFoundException e) {
+				menu.errorMessage("unable to open file, please check the database path");
+				
+			} 
 		}
 	}
 	
@@ -230,8 +240,8 @@ public class ToyStorageDB {
 		
 //		String currentType;
 		
-		for (Toy toy : toydb) {// read each object in list
-			if (toy.typeOf().equals(type)) toyTypeList.add(toy);// if an object is a specific type then add to a list, then return that list
+		for (Toy toy : toydb) { 									 		// read each object in list
+			if (toy.typeOf().equals(type)) toyTypeList.add(toy); 	 // if an object is a specific type then add to a list, then return that list
 		}
 		
 		return toyTypeList;
