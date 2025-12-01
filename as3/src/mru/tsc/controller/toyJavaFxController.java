@@ -215,7 +215,59 @@ public class toyJavaFxController {
 		purchase(selectedToy);
 		
 	}
+ private void refreshToyListView() {
+        if (toyListView == null || toyDB == null) return;
 
+        toyListView.getItems().clear();
+
+        for (Toy t : toyDB.getToyDB()) {
+            // Choose any display format you like
+            String line = t.getSerialNum() + " - " + t.getName();
+            toyListView.getItems().add(line);
+        }
+    }
+
+    @FXML
+    private void btnListenerRemove(MouseEvent event) {
+        if (toyDB == null) {
+            lblErrorGift1.setText("Database not loaded.");
+            return;
+        }
+
+        lblErrorGift1.setText(""); // clear old message
+
+        String serial = removeSerialTF.getText().trim();
+
+        if (serial.isEmpty()) {
+            lblErrorGift1.setText("Please enter a serial number.");
+            return;
+        }
+
+        // Use your existing helper to find by serial
+        ArrayList<Toy> matches = toyDB.compareSNToAllToys(serial);
+
+        if (matches.isEmpty()) {
+            lblErrorGift1.setText("Toy with that serial number was not found.");
+            return;
+        }
+
+        Toy toyToRemove = matches.get(0); // serials should be unique
+
+        try {
+            // remove from ArrayList
+            toyDB.removeData(toyToRemove);
+
+            // write updated list back to file
+            toyDB.saveData();
+
+            // update UI
+            refreshToyListView();
+            removeSerialTF.clear();
+            lblErrorGift1.setText("Toy removed successfully.");
+        } catch (Exception e) {
+            lblErrorGift1.setText("Error while removing toy!");
+        }
+    }
 	/**
 	 * This method promts and adds a toy in the database
 	 * 
