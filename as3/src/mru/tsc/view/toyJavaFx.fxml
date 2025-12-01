@@ -1,15 +1,358 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="mru.tsc.controller.toyJavaFxController">
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="mru.tsc.controller.toyJavaFxController">
    <center>
-      <AnchorPane prefHeight="200.0" prefWidth="739.0" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="576.0" prefWidth="733.0" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="318.0" layoutY="88.0" mnemonicParsing="false" text="Button" />
+            <TabPane prefHeight="577.0" prefWidth="733.0" tabClosingPolicy="UNAVAILABLE">
+               <tabs>
+
+
+                  <!--                    HOME TAB                     -->
+                  <!-- ================================================= -->
+
+                  <Tab fx:id="tabp1" text="Home">
+                     <content>
+                        <BorderPane prefHeight="576.0" prefWidth="733.0">
+
+                           <!-- LEFT: search panel -->
+                           <left>
+                              <VBox spacing="10.0" BorderPane.alignment="CENTER">
+                                 <padding>
+                                    <Insets top="10.0" right="10.0" bottom="10.0" left="10.0"/>
+                                 </padding>
+                                 <children>
+
+                                    <Label text="Search Inventory:"/>
+
+                                    <HBox spacing="10.0">
+                                       <children>
+                                          <RadioButton fx:id="rbSerial" text="Serial Number" selected="true"/>
+                                          <RadioButton fx:id="rbName" text="Name"/>
+                                          <RadioButton fx:id="rbType" text="Type"/>
+                                       </children>
+                                    </HBox>
+
+                                    <GridPane hgap="5.0" vgap="8.0">
+                                       <columnConstraints>
+                                          <ColumnConstraints minWidth="90.0"/>
+                                          <ColumnConstraints/>
+                                       </columnConstraints>
+                                       <children>
+                                          <Label text="Serial Number(SN)" style="-fx-text-fill: red;"
+                                                 GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                                          <TextField fx:id="txtSerialHome"
+                                                     promptText="Enter SN here..."
+                                                     GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                                          <Label text="Name"
+                                                 GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                                          <TextField fx:id="txtNameHome"
+                                                     GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                                          <Label text="Type"
+                                                 GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                                          <TextField fx:id="txtTypeHome"
+                                                     GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                                       </children>
+                                    </GridPane>
+
+                                    <HBox spacing="10.0">
+                                       <children>
+                                          <Button fx:id="btnSearchHome"
+                                                  text="Search" prefWidth="80.0"
+                                                  onAction="#onSearchHome"/>
+
+                                          <Button fx:id="btnClearHome"
+                                                  text="Clear" prefWidth="80.0"
+                                                  onAction="#onClearHome"/>
+                                       </children>
+                                    </HBox>
+
+                                 </children>
+                              </VBox>
+                           </left>
+
+                           <!-- CENTER: welcome + list view -->
+                           <center>
+                              <VBox spacing="10.0" BorderPane.alignment="CENTER">
+                                 <padding>
+                                    <Insets top="10.0" right="10.0" bottom="10.0" left="10.0"/>
+                                 </padding>
+                                 <children>
+                                    <Label text="Welcome To Toy Store Company"/>
+                                    <ListView fx:id="listViewHome"
+                                              prefHeight="380.0"
+                                              prefWidth="500.0"/>
+                                 </children>
+                              </VBox>
+                           </center>
+
+                           <!-- BOTTOM: Buy button -->
+                           <bottom>
+                              <HBox alignment="CENTER" BorderPane.alignment="CENTER">
+                                 <padding>
+                                    <Insets top="10.0" right="10.0" bottom="10.0" left="10.0"/>
+                                 </padding>
+                                 <children>
+                                    <Button fx:id="btnBuy"
+                                            text="Buy" prefWidth="120.0"
+                                            onAction="#onBuy"/>
+                                 </children>
+                              </HBox>
+                           </bottom>
+
+                        </BorderPane>
+                     </content>
+                  </Tab>
+
+
+                  <!--                   ADD TOY TAB                   -->
+                  <!-- ================================================= -->
+
+                  <Tab fx:id="tabp2" text="Add Toy">
+                     <content>
+                        <AnchorPane prefHeight="576.0" prefWidth="733.0">
+                           <children>
+                              <AnchorPane layoutX="20.0" layoutY="20.0"
+                                          prefHeight="520.0" prefWidth="300.0">
+                                 <children>
+                                    <Label layoutX="10.0" layoutY="10.0"
+                                           text="Enter New Toy Information:" />
+                                    <Label layoutX="10.0" layoutY="60.0" text="Category" />
+                                    <ComboBox fx:id="categoryCB"
+                                              layoutX="130.0" layoutY="55.0"
+                                              prefWidth="150.0" />
+
+                                    <Label layoutX="10.0" layoutY="110.0" text="Serial Number" />
+                                    <TextField fx:id="serialTF"
+                                               layoutX="130.0" layoutY="105.0"
+                                               prefWidth="150.0" />
+
+                                    <Label layoutX="10.0" layoutY="160.0" text="Name" />
+                                    <TextField fx:id="nameTF"
+                                               layoutX="130.0" layoutY="155.0"
+                                               prefWidth="150.0" />
+
+                                    <Label layoutX="10.0" layoutY="210.0" text="Brand" />
+                                    <TextField fx:id="brandTF"
+                                               layoutX="130.0" layoutY="205.0"
+                                               prefWidth="150.0" />
+
+                                    <Label layoutX="10.0" layoutY="260.0" text="Price" />
+                                    <TextField fx:id="priceTF"
+                                               layoutX="130.0" layoutY="255.0"
+                                               prefWidth="150.0" />
+
+                                    <Label layoutX="10.0" layoutY="310.0" text="Available-count" />
+                                    <TextField fx:id="countTF"
+                                               layoutX="130.0" layoutY="305.0"
+                                               prefWidth="150.0" />
+
+                                    <Label layoutX="10.0" layoutY="360.0" text="Age-appropriate" />
+                                    <TextField fx:id="ageTF"
+                                               layoutX="130.0" layoutY="355.0"
+                                               prefWidth="150.0" />
+
+                                    <Button fx:id="saveBtn"
+                                            layoutX="80.0" layoutY="430.0"
+                                            prefWidth="150.0"
+                                            text="Save" />
+                                 </children>
+                              </AnchorPane>
+
+                              <AnchorPane layoutX="340.0" layoutY="20.0"
+                                          prefHeight="520.0" prefWidth="370.0">
+                                 <children>
+
+                                    <AnchorPane layoutX="0.0" layoutY="0.0"
+                                                prefHeight="240.0" prefWidth="180.0"
+                                                style="-fx-border-color: lightgray;">
+                                       <children>
+                                          <Label layoutX="70.0" layoutY="15.0" text="Figure" />
+                                          <Label layoutX="20.0" layoutY="80.0"
+                                                 text="Classification" />
+                                          <TextField fx:id="figureClassTF"
+                                                     layoutX="20.0" layoutY="110.0"
+                                                     prefWidth="140.0" />
+                                       </children>
+                                    </AnchorPane>
+
+                                    <AnchorPane layoutX="190.0" layoutY="0.0"
+                                                prefHeight="240.0" prefWidth="180.0"
+                                                style="-fx-border-color: lightgray;">
+                                       <children>
+                                          <Label layoutX="70.0" layoutY="15.0" text="Animal" />
+                                          <Label layoutX="20.0" layoutY="70.0"
+                                                 text="Material" />
+                                          <TextField fx:id="animalMaterialTF"
+                                                     layoutX="20.0" layoutY="90.0"
+                                                     prefWidth="140.0" />
+                                          <Label layoutX="20.0" layoutY="130.0"
+                                                 text="Size" />
+                                          <TextField fx:id="animalSizeTF"
+                                                     layoutX="20.0" layoutY="150.0"
+                                                     prefWidth="140.0" />
+                                       </children>
+                                    </AnchorPane>
+
+                                    <AnchorPane layoutX="0.0" layoutY="260.0"
+                                                prefHeight="240.0" prefWidth="180.0"
+                                                style="-fx-border-color: lightgray;">
+                                       <children>
+                                          <Label layoutX="70.0" layoutY="15.0" text="Puzzle" />
+                                          <Label layoutX="20.0" layoutY="90.0" text="Type" />
+                                          <TextField fx:id="puzzleTypeTF"
+                                                     layoutX="20.0" layoutY="115.0"
+                                                     prefWidth="140.0" />
+                                       </children>
+                                    </AnchorPane>
+
+                                    <AnchorPane layoutX="190.0" layoutY="260.0"
+                                                prefHeight="240.0" prefWidth="180.0"
+                                                style="-fx-border-color: lightgray;">
+                                       <children>
+                                          <Label layoutX="45.0" layoutY="15.0"
+                                                 text="Board Game" />
+                                          <Label layoutX="10.0" layoutY="70.0"
+                                                 text="Minimum Number of Players" />
+                                          <TextField fx:id="bgMinTF"
+                                                     layoutX="10.0" layoutY="95.0"
+                                                     prefWidth="150.0" />
+                                          <Label layoutX="10.0" layoutY="135.0"
+                                                 text="Maximum Number of Players" />
+                                          <TextField fx:id="bgMaxTF"
+                                                     layoutX="10.0" layoutY="160.0"
+                                                     prefWidth="150.0" />
+                                          <Label layoutX="10.0" layoutY="200.0"
+                                                 text="Designers" />
+                                          <TextField fx:id="bgDesignersTF"
+                                                     layoutX="10.0" layoutY="225.0"
+                                                     prefWidth="150.0" />
+                                       </children>
+                                    </AnchorPane>
+
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+
+
+
+                  <!--                 REMOVE TOY TAB                  -->
+                  <!-- ================================================= -->
+
+                  <Tab fx:id="tabp3" text="Remove toy">
+                     <content>
+                        <AnchorPane prefHeight="576.0" prefWidth="733.0">
+                           <children>
+                              <AnchorPane layoutX="20.0" layoutY="20.0"
+                                          prefHeight="520.0" prefWidth="260.0">
+                                 <children>
+                                    <Label layoutX="10.0" layoutY="10.0"
+                                           text="Enter Toy Serial Number:" />
+                                    <Separator layoutX="0.0" layoutY="40.0"
+                                               prefWidth="260.0" />
+                                    <Label layoutX="10.0" layoutY="90.0"
+                                           text="Serial Number" />
+
+                                    <TextField fx:id="removeSerialTF"
+                                               layoutX="20.0" layoutY="120.0"
+                                               prefWidth="220.0" />
+
+                                    <Button fx:id="removeBtn"
+                                            layoutX="70.0" layoutY="380.0"
+                                            prefWidth="120.0"
+                                            text="Remove" />
+                                 </children>
+                              </AnchorPane>
+
+                              <ListView fx:id="toyListView"
+                                        layoutX="300.0" layoutY="20.0"
+                                        prefHeight="520.0" prefWidth="410.0" />
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+
+
+
+                  <!--                     GIFT TAB                     -->
+                  <!-- ================================================= -->
+
+                  <Tab fx:id="tabp4" text="Gift ">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0"
+                                    prefHeight="180.0" prefWidth="200.0">
+                           <children>
+
+                              <AnchorPane prefHeight="520.0" prefWidth="300.0">
+                                 <children>
+                                    <Label layoutX="20.0" layoutY="32.0"
+                                           text="Enter Toy Information:" />
+                                    <Label layoutX="20.0" layoutY="82.0"
+                                           text="Category" />
+                                    <ComboBox fx:id="categoryCB1"
+                                              layoutX="140.0" layoutY="77.0"
+                                              prefWidth="150.0" />
+
+                                    <Label layoutX="20.0" layoutY="132.0"
+                                           text="Age of the recipient" />
+                                    <TextField fx:id="tfAge"
+                                               layoutX="140.0" layoutY="127.0"
+                                               prefWidth="150.0" />
+
+                                    <Label layoutX="20.0" layoutY="182.0"
+                                           text="Minimum Price" />
+                                    <TextField fx:id="tfMinPrice"
+                                               layoutX="140.0" layoutY="177.0"
+                                               prefWidth="150.0" />
+
+                                    <Label layoutX="20.0" layoutY="232.0"
+                                           text="Maximum Price" />
+                                    <TextField fx:id="tfMaxPrice"
+                                               layoutX="140.0" layoutY="227.0"
+                                               prefWidth="150.0" />
+
+                                    <Label fx:id="lblErrorGift"
+                                           layoutX="31.0" layoutY="372.0"
+                                           prefHeight="18.0" prefWidth="250.0"
+                                           text="ERROR message goes here" />
+                                 </children>
+                              </AnchorPane>
+
+                              <ListView fx:id="listViewGift"
+                                        layoutX="309.0" layoutY="14.0"
+                                        prefHeight="520.0" prefWidth="410.0" />
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+
+               </tabs>
+            </TabPane>
          </children>
       </AnchorPane>
    </center>
