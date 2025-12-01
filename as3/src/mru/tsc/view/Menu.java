@@ -60,13 +60,13 @@ public class Menu {
 	    String type;
 
 	    while(true) {
-	        type = typeInput.trim().toLowerCase();
+	        type = typeInput.trim().toLowerCase() ;
 
 	        // Check if user pressed Enter (empty input)
-	        if (type.isEmpty()) {
+	        if (type.equals("")) {
 	            return "";
 	        }
-	        if (type.length() == 1) {
+	        if (!type.equals("")) {
 	            char typeCharac = type.charAt(0);
 	            if (typeCharac == 'f' || typeCharac == 'a' || typeCharac == 'p' || typeCharac == 'b') {
 	                return Character.toString(typeCharac);

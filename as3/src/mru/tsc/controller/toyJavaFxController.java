@@ -19,6 +19,8 @@ import mru.tsc.view.Menu;
 
 public class toyJavaFxController {
 
+	ArrayList<Toy> filteredList;
+	
 	/**
 	 * This field contains a list of the toy object from the data base
 	 */
@@ -67,10 +69,11 @@ public class toyJavaFxController {
 		
 		toyList = toyStorageDB.getToyDB();
 		
+		
 //		startMenu();
 		
 	}
-	
+
 	/**
 	 * This method starts the program and calls for to prompt the main menu that loops until the user chooses to exit
 	 * Additionally, it resets the backToMainMenu field to false to ensure that the user can go to the sub-menu
@@ -398,6 +401,8 @@ public class toyJavaFxController {
 	 * @return the toy object that the user selected
 	 */
 	private Toy selectValidation (ArrayList<Toy> searchedList) {
+		
+		
 		int userSelectionInput;
 		int maxSearchedListSize = searchedList.size(); // check the size of the list, that will be the maximum number the user can input
 		
@@ -425,7 +430,7 @@ public class toyJavaFxController {
 		if (toy.getCount() > 0) { 
 			toy.toyDecrement(); //if theres at least one toy available and the user wants to purchase then remove one count from the DB
 			menu.purchaseSuccess(); // now calls the menu class
-			menu.pressEnter();
+			
 		}
 		else menu.outOfStock();// now calls the menu class
 	}
@@ -436,12 +441,12 @@ public class toyJavaFxController {
 	 * @param searchedList the list containing the toys in the database as an ArrayList Class
 	 */
 	private void displayToyList(ArrayList<Toy> searchedList) {
-		
+		listViewGift.getItems().clear();
 		int count = 0;
 		for (Toy toy : searchedList) {
 			count ++;
 			//There should be a menu call here that takes in count
-			
+			listViewGift.getItems().add(toy.toString());
 			menu.displaytoylist(count, toy.toString());
 
 		}
@@ -475,7 +480,8 @@ public class toyJavaFxController {
 		String maxPriceString = null;
 		Double maxPrice = null;
 		
-		ArrayList<Toy> filteredList;
+		
+		if (filteredList != null )filteredList.clear();
 		
 //		while(true) {
 			
@@ -500,11 +506,15 @@ public class toyJavaFxController {
 				maxPrice = maxPriceValidation(maxPriceString);
 			
 				if (minPrice != null && maxPrice != null && minPrice > maxPrice) {
+					listViewGift.getItems().clear();
+					lblErrorGift.setText("Error: minimum price cannot be greater than the maximum price.");
 	                menu.displayMinMoreThanMaxError();
 	            } //else break;
 //			}
 			
 			if (ageString.isEmpty() && type.isEmpty() && minPriceString.isEmpty() && maxPriceString.isEmpty()) { //do this in the menu class
+				lblErrorGift.setText("ERROR: at least one field must be filled out");
+
 				menu.atLeastOneFieldMessage(); // now calls the menu class
 			}
 			else {
@@ -518,11 +528,12 @@ public class toyJavaFxController {
 				menu.displayGiftSuggestionResult(); // Now calls the menu class
 				if(filteredList.isEmpty()) { //if its empty then let user know and stop this function by returning
 					menu.toyNotFound();
+					listViewGift.getItems().clear();
 					return;
 				}
 				
 				displayToyList(filteredList);
-		//		Toy selectedToy = selectValidation(filteredList);
+//				Toy selectedToy = selectValidation(filteredList);
 		//		if(selectedToy == null) {
 		//			backToMainMenu = true;
 		//			return;
@@ -590,11 +601,16 @@ public class toyJavaFxController {
 			try {
 			  	age = Integer.parseInt(ageString); //return this value unless invalid return max to get all toys
 			  	if (age <= 0) {
+			  		listViewGift.getItems().clear();
+			  		lblErrorGift.setText("Invalid Input: setting age field as default");
 			  		menu.invalidMessage("setting age field as default"); //empty means all there is not age limit
 			  		age = Integer.MAX_VALUE;
 			  	}
 
 			} catch (Exception e) {
+				listViewGift.getItems().clear();
+		  		lblErrorGift.setText("Invalid Input: setting age field as empty");
+
 				menu.invalidMessage("setting age field as empty");
 			}
 		}
@@ -620,11 +636,15 @@ public class toyJavaFxController {
 				menu.checkNegativePrice(minPrice);
 			} 
 			catch (NegativePriceException e) {
+				listViewGift.getItems().clear();
+				lblErrorGift.setText("Invalid Input: Cannot be negative number, seeting  field to default");
 				menu.invalidMessage(" Cannot be negative number, seeting  field to default");
 				minPrice = 0.0;
 				//just set to zero if its a negative doesnt make a difference
 			}
 			catch (Exception e) {
+				listViewGift.getItems().clear();
+				lblErrorGift.setText("Invalid Input: invalid minimum price, setting field as empty");
 				menu.invalidMessage("invalid minimum price, setting field as empty");
 
 			}
@@ -651,10 +671,16 @@ public class toyJavaFxController {
 				menu.checkNegativePrice(maxPrice);
 			}
 			catch (NegativePriceException e) {
+				listViewGift.getItems().clear();
+				lblErrorGift.setText("Invalid Input: Cannot be negative number, seeting  field to default");
+
 				menu.invalidMessage(" Cannot be negative number, seeting  field to default");
 				
 			}
 			catch (Exception e) {
+				listViewGift.getItems().clear();
+				lblErrorGift.setText("Invalid Input: setting field as empty");
+
 				menu.invalidMessage(" setting field as empty");
 			}	
 		}
@@ -695,7 +721,7 @@ public class toyJavaFxController {
     private Button btnSubmit;
 
     @FXML
-    private ComboBox<?> categoryCB;
+    private ComboBox<String> categoryCB;
 
     @FXML
     private ComboBox<?> categoryCB1;
@@ -710,7 +736,7 @@ public class toyJavaFxController {
     private Label lblErrorGift;
 
     @FXML
-    private ListView<?> listViewGift;
+    private ListView<String> listViewGift;
 
     @FXML
     private TextField nameTF;
@@ -752,23 +778,61 @@ public class toyJavaFxController {
     private TextField tfMaxPrice;
 
     @FXML
+    private Button btnpurchase;
+    
+    @FXML
     private TextField tfMinPrice;
 
     @FXML
-    private ListView<?> toyListView;
+    private ListView<String> toyListView;
+    
+    
+	
+	@FXML
+	private void initialize() {
+		categoryCB.getItems().addAll("Animal", "BoardGames", "Figure", "Puzzle", "");
+		categoryCB.setValue("");
+	}
+    
     @FXML
+    
     void submitGift(ActionEvent event) {
     	String typeInput;
     	//String giftAge, String typeInput, String minPriceInput, String maxPriceInput
     	
 
     
-    if (categoryCB1.getValue() == null) {// if its empty or user chooses none
+    if (categoryCB.getValue() == null) {// if its empty or user chooses none
     		 typeInput = "";
     }
-    else typeInput = categoryCB1.getValue().toString();
+    else typeInput = categoryCB.getValue().toString();
     
     giftSuggestion(tfAge.getText(), typeInput, tfMinPrice.getText(), tfMaxPrice.getText());
     }
+    
+    @FXML
+    void purchaseThis(ActionEvent event) {
+    	Toy selectedToy =null;
+    	int selected =listViewGift.getSelectionModel().getSelectedIndex();
+    	try {
+    		 selectedToy = filteredList.get(selected);
+		} catch (IndexOutOfBoundsException e) {
+			lblErrorGift.setText("Error: no items selected");
+			System.out.println("Error: no items selected");
+			return;
+			
+		} catch (NullPointerException e) {
+			lblErrorGift.setText("Error: no items selected");
+
+			System.out.println("Error: no items selected");
+			return;
+		}
+    
+    	purchase(selectedToy);
+    	toyStorageDB.saveData();
+    	submitGift(event);
+    	
+    }
 	
+    
 }
