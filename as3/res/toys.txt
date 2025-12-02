@@ -3,7 +3,7 @@
 3066990646;Horse;Gamescape;165.61;1;7;Wooden;L
 5726898779;Pocket Cube;Game Orc;42.83;1;4;M
 3015547049;Dove;Game Zombie;24.55;2;9;Wooden;S
-1147205649;Ninja Turtles;Gamezoid;46.15;10;6;A
+1147205649;Ninja Turtles;Gamezoid;46.15;8;6;A
 4863437054;Logic puzzle;Game Shadow;265.62;11;4;T
 6114587612;Morpion solitaire;Game Rush;47.89;5;6;L
 4774316121;Snake cube;Game Sensor;184.21;9;3;C
@@ -16,7 +16,7 @@
 4079383569;Daughter in the box;Game Pixel;90.01;13;10;M
 0693095326;Napoleon;Gamescape;14.16;10;3;H
 0113513686;Toy soldier;Gamen;14.06;2;5;A
-4731499724;Problem solving;Game Sensor;93.08;11;7;C
+4731499724;Problem solving;Game Sensor;93.08;10;7;C
 4353818087;Eight queens puzzle;Gamescape;15.69;5;6;C
 7235647474;13 Dead End Drive;Game Assassin;55.18;10;9;1-8;Emeli Davis
 6045331143;Computer puzzle game;Game Survival;98.77;13;4;T
@@ -26,7 +26,7 @@
 9258568559;Jenga;Game Reboot;49.34;10;7;2-7;Maryam Mcdonnell,Shanaya Walter
 2804598463;Kangaroo;Gamefluent;289.37;14;6;Wooden;S
 5239019250;Nob Yoshigahara Puzzle Design Competition;Game Zombie;67.20;5;3;M
-6001104201;Tour puzzle;Gamefluent;114.71;13;6;T
+6001104201;Tour puzzle;Gamefluent;114.71;11;6;T
 1989637627;Abraham Lincoln;Game Throne;60.10;5;7;H
 5446463966;Rubik's Magic;Game Sensor;15.71;7;2;C
 5972333473;Knights and knaves;Game Buff;106.99;2;7;M
@@ -225,7 +225,6 @@
 7777777777;abcd;abcd;1212.00;121212;12;12-23;Steve Jobs, Pikachu
 7777777778;blood;hasbruh;67.00;67;67;41-67;bruv, blud
 1111111133;w;w;12.00;1;1;H
-1111111111;fds;wqe;12.00;12;12;A
 0000000000;erere;erer;12.00;12;12;A
 0000000001;erere;erer;12.00;12;12;A
 0000000007;erere;erer;12.00;12;12;A
@@ -235,3 +234,6 @@
 1222222222;ttt;tttttttt;55.00;555;55;A
 2444444444;qqqq;qqqqq;23.00;23;23;darkmater;S
 9222222222;ttttttttt;ereree;3322.00;11;4;11-13;rrrrrpooopp
+6222222267;BOA;LUFFY;122.00;212;9;M
+1111111113;rty;qqqqqqqqq;33333.00;33333;33;A
+7212121212;wwwww;wwwww;121212.00;11;11;1-2;blooop

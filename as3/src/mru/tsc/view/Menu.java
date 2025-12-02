@@ -22,7 +22,7 @@ public class Menu {
      */
 	public String askNameInput() {
 	    System.out.print("Enter Toy Name: ");
-	    String name = input.nextLine()
+	    String name = input.nextLine();
 	    while (name.isEmpty()) {
 	        System.out.print("Invalid input: empty field");
 	        tryAgain();

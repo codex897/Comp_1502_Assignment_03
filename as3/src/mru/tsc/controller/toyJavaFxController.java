@@ -12,6 +12,13 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 
+
+import java.util.logging.Logger;
+import java.util.logging.FileHandler;
+import java.util.logging.SimpleFormatter;
+import java.util.logging.Level;
+import java.io.IOException; 
+import java.util.logging.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -22,7 +29,7 @@ import mru.tsc.view.Menu;
 
 public class toyJavaFxController {
 	String toyType;
-	
+	private static final Logger logger = Logger.getLogger(toyJavaFxController.class.getName());
 	ArrayList<Toy> filteredList;
 	
 	ArrayList<Toy> sameSNList;
@@ -56,7 +63,7 @@ public class toyJavaFxController {
 	 */
 	final String FILE_PATH = "res/toys.txt" ;
 	
-	
+	private ToggleGroup homeSearchGroup;
 	private NegativePriceException error;
 	/**
 	 * This constructor initializes the Menu class, assigns the arraylist containg the toys into toyList
@@ -73,45 +80,32 @@ public class toyJavaFxController {
 		
 		toyList = toyStorageDB.getToyDB();
 		
+		
+		
+
+		    // Create logger
+		     
+
+		        setupLogger();
+		    
 //		startMenu();
 		
 	}
-
+	
 	/**
-	 * This method starts the program and calls for to prompt the main menu that loops until the user chooses to exit
-	 * Additionally, it resets the backToMainMenu field to false to ensure that the user can go to the sub-menu
+	 * This method sets up the logger by creating and opening the log files and setting the level
 	 */
-	private void startMenu() {
-		
-		while(true) {
-			backToMainMenu = false; // re-initialize this to false just incase it was turned true when user wanted to go back to menu
-			String userOption = menu.displayMainMenu(); // no validation yet
-			
-			switch (userOption) {
-			case "1":
-				searchInventory();
-				
-				break;
-			case "2":
-				addNewToy();
-				break;
-			case "3":
-				removeToy();
-				break;
-			case "4":
-				giftSuggestion();
-				break;
-			case "5":
-				saveExit();
-				return;
-				
-
-			default:
-				break;
-			}
-		}
-		
-	}
+	private void setupLogger() {
+        try {
+            FileHandler handler = new FileHandler("res/toy_store_log.txt", true);
+            handler.setFormatter(new SimpleFormatter());
+            logger.addHandler(handler);
+            logger.setLevel(Level.ALL);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+	
 
 	/**
 	 * This method displays indication of data saving as well as calls to transfer all toy data in the array list into the original text file
@@ -406,7 +400,7 @@ public class toyJavaFxController {
 	            if (maxNum >= 1) {
 	            	maxPlayers = Integer.toString(maxNum);
 	            } else {
-	            	lblNoticeAdd1.setText("Invalid Board Game input: Must have at least 1 player!");
+	            	lblNoticeAdd1.setText("Invalid Board Game input: maximum players must be more than 1");
 	               return;
 	            }
 	        } catch (Exception e) {
@@ -448,7 +442,7 @@ public class toyJavaFxController {
 	    if( Integer.parseInt(minPlayers)>Integer.parseInt(maxPlayers)) {
 	    		throw new InvalidPlayersException("Minimum number of players cannot be more than Maximumnumbers of players"); //throws an exception
 	    }
-
+		logger.info(serialNum + ";" + name + ";" + brand + ";" + price + ";" + count + ";" + age +";" + minPlayers + ";" + maxPlayers + ";" + designers);
 	    return new String[]{serialNum, name, brand, price, count, age, minPlayers + "-" + maxPlayers, designers};
 	}
 
@@ -471,7 +465,7 @@ public class toyJavaFxController {
    	 if(puzzleType.equals("m") || puzzleType.equals("c") || puzzleType.equals("l") || puzzleType.equals("t") || puzzleType.equals("r") ) {
 
    	 }
-
+ 	logger.info(serialNum + ";" + name + ";" + brand + ";" + price + ";" + count + ";" + age +";" + puzzleType);
 	    return  new String[] {serialNum, name, brand, price, count, age, puzzleType};
 	}
 
@@ -492,7 +486,7 @@ public class toyJavaFxController {
     		
     	}
  
-
+    	logger.info(serialNum + ";" + name + ";" + brand + ";" + price + ";" + count + ";" + age +";" + material + ";" + size);
 	    return new String[] {serialNum, name, brand, price, count, age, material, size};
 	}
 
@@ -513,7 +507,7 @@ public class toyJavaFxController {
     		
     	}
 
-	    
+    	 logger.info(serialNum + ";" + name + ";" + brand + ";" + price + ";" + count + ";" + age + ";" + classification);
 	    return new String[] {serialNum, name, brand, price, count, age, Character.toString(classification)};
 	}
 
@@ -1031,7 +1025,9 @@ public class toyJavaFxController {
     
     
     
-	
+	/**
+	 * This method initiallizes the javafx default and start up displays
+	 */
     @FXML
     private void initialize() {
 		paneFigure.setDisable(true);
@@ -1054,21 +1050,25 @@ public class toyJavaFxController {
         cbTypePuzzle.setValue("Mechanical");
         
         
-        // ========= HOME TAB INITIAL SETUP =========
-        // Show all toys in the Home list view when the GUI starts
-        if (toyList != null && listViewHome != null) {
-            listViewHome.getItems().clear();
-            homeSearchList = new ArrayList<Toy>();
 
-            for (Toy toy : toyList) {
-                listViewHome.getItems().add(toy.toString());
-                homeSearchList.add(toy);
-            }
-        }
+
+        // === Make the Home radio buttons mutually exclusive ===
+        homeSearchGroup = new ToggleGroup();
+        rbSerial.setToggleGroup(homeSearchGroup);
+        rbName.setToggleGroup(homeSearchGroup);
+        rbType.setToggleGroup(homeSearchGroup);
+
+        // default selection
+        rbSerial.setSelected(true);
         
         
     }
 
+
+    /**
+     * This method submits the gifts  by calling giftsuggetion to display
+     * @param event the button to submit
+     */
     @FXML
     void submitGift(ActionEvent event) {
     	String typeInput;
@@ -1084,6 +1084,10 @@ public class toyJavaFxController {
         giftSuggestion(tfAge.getText(), typeInput, tfMinPrice.getText(), tfMaxPrice.getText());
     }
     
+    /**
+     * This method purchases the selected item
+     * @param event the button to purchase
+     */
     @FXML
     void purchaseThis(ActionEvent event) {
     	Toy selectedToy =null;
@@ -1101,8 +1105,10 @@ public class toyJavaFxController {
 			System.out.println("Error: no items selected");
 			return;
 		}
-    
+    	logger.info(selectedToy.toString()); // logger to log when purchasing
     	purchase(selectedToy);
+    	lblErrorGift.setText("successfully Purchased Toy!");
+    	 
     	toyStorageDB.saveData();
     	submitGift(event);
     	
@@ -1124,6 +1130,11 @@ public class toyJavaFxController {
      */
     @FXML
     private void onSearchHome(ActionEvent event) {
+    	ToggleGroup homeSearchGroup = new ToggleGroup();
+    	rbSerial.setToggleGroup(homeSearchGroup);
+    	rbName.setToggleGroup(homeSearchGroup);
+    	rbType.setToggleGroup(homeSearchGroup);
+
 
         // Clear old results
         listViewHome.getItems().clear();
@@ -1278,6 +1289,10 @@ public class toyJavaFxController {
     private TextField tfSearchRemove;
    
 
+    /**
+     * this method seerches for the item that the user wants to remove
+     * @param event the button that searches
+     */
     @FXML
     private void searchRemove(ActionEvent event) {
         
@@ -1306,6 +1321,10 @@ public class toyJavaFxController {
 	        removeToy(removeSerialTF.getText().trim());
     }
     
+    /**
+     * This method actually removes the selected toy from the databaase
+     * @param event the button to remove the toy
+     */
     @FXML
     private void submitRemove(ActionEvent event) {
     	Toy selectedToy =null;
@@ -1327,11 +1346,16 @@ public class toyJavaFxController {
     	int indexInDataBase ;
     	indexInDataBase = toyList.indexOf(sameSNList.get(0)); //get the object in the sameSNList and get the index for that object within the data base arraylist of toys
 	toyList.remove(indexInDataBase); //get the arraylist containing the toys and remove that toy from there
+	logger.info(sameSNList.get(0).toString()); //logger to log when removing an item
     	toyStorageDB.saveData();
     	searchRemove(event);
     }
     
     
+    /**
+     * This method is for enabling the other fields for the specific toy that the user selects to ensure that the right fields are correctly filled out
+     * @param event the combobox that has the toy category
+     */
     @FXML
     void enableToy(ActionEvent event) {
     	//disable all the panes first and then enamble them later
