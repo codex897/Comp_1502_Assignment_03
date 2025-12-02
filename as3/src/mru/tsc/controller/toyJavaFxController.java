@@ -8,6 +8,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.AnchorPane;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -18,8 +21,11 @@ import mru.tsc.model.*;
 import mru.tsc.view.Menu;
 
 public class toyJavaFxController {
-
+	String toyType;
+	
 	ArrayList<Toy> filteredList;
+	
+	ArrayList<Toy> sameSNList;
 	
 	/**
 	 * This field contains a list of the toy object from the data base
@@ -65,10 +71,7 @@ public class toyJavaFxController {
 		toyStorageDB =  new ToyStorageDB(FILE_PATH);
 		toyStorageDB.addData();
 		
-
-		
 		toyList = toyStorageDB.getToyDB();
-		
 		
 //		startMenu();
 		
@@ -224,52 +227,212 @@ public class toyJavaFxController {
 	 * then promts the user to enter the specific toy data related to the type
 	 * finally, it calls a method from the ToyStorageDB class that gives all the type information into that method that adds it to the arraylist containing all toys
 	 */
-	private void addNewToy() { //WIP 
-		
+	@FXML
+	private void addNewToy(ActionEvent event) { //WIP 
+   	 lblNoticeAdd1.setText("");
+
 		ArrayList<Toy> sameSNList;
 		String userSerialNumber; 
+		 double priceToy; 
+			String count = countTF.getText();
+			String price = priceTF.getText();
+			String age = ageTF.getText();
+			
+			String name = nameTF.getText().trim();
+		    String brand = brandTF.getText().trim();
 		
-		while(true) { // should add try catch 
-			userSerialNumber =  menu.askSerialNumber(); //must validate sn
-			sameSNList = toyStorageDB.compareSNToAllToys(userSerialNumber); //a list containing an item with the same serial number
-			if (!sameSNList.isEmpty()) menu.snNotUnique(); // Calls menu class now for sn situation.
-			else break;
-		}
+		String sn = serialTF.getText();
 		
-		String toyType = toyStorageDB.getToyType(userSerialNumber); //takes in the serial number and checks for specific type of toy
+		if( sn.isEmpty() || name.isEmpty() || brand.isEmpty() || price.isEmpty()  || count.isEmpty() || age.isEmpty()) {
+        	lblNoticeAdd1.setText("ERROR: All fields MUST be filled out");
+        	return;
+	 }
+	    try {
+	    		priceToy = Double.parseDouble(priceTF.getText().trim()) ;
+            
+            menu.checkNegativePrice(priceToy);
+             price = Double.toString(priceToy);
+
+        } catch (NegativePriceException e) {
+        		lblNoticeAdd1.setText("Invalid price input: price cannot be negative number"); 
+        		return ;
+
+        }
+        catch (Exception e ) {
+        	lblNoticeAdd1.setText("Invalid Price input: Input must be a number.");
+        	return ;
+        }
+	   
+	    
+	    
+	    try {
+            int countToy = Integer.parseInt(countTF.getText().trim());
+            
+            if (!(countToy >= 0)) {
+            	lblNoticeAdd1.setText("Invalid Count input: Count cannot be negative number");
+            	return ;
+            } else  count = Integer.toString(countToy) ;
+        } catch (Exception e) {
+        	lblNoticeAdd1.setText("Invalid Count input: Input must be a number");
+        		return ;
+        }
+    
+	    
+	    
+	    try {
+            int ageToy = Integer.parseInt(ageTF.getText().trim()) ;
+            
+            if (!(ageToy >= 0)) {
+            	lblNoticeAdd1.setText("Invalid age input: Age cannot be a negative number");  
+            	return;
+            	
+            }
+            else age = Integer.toString(ageToy);
+        } catch (Exception e) {
+        	lblNoticeAdd1.setText("Invalid  age input: Input must be a number");
+        	return;
+           
+
+        }
+		 
 		
+	    try {
+	         sn = serialTF.getText().trim();
+	        
+	       
+	        if (sn.length() != 10) {
+	            lblNoticeAdd1.setText("Invalid serial number: must be exactly 10 digits");
+	            return;
+	        }
+	        
+	       
+	        Long snLong = Long.parseLong(sn);
+
+	        
+	    } catch (NumberFormatException e) {
+	        lblNoticeAdd1.setText("Invalid serial number Input: must contain only digits (0-9)");
+	        return;
+	    } catch (Exception e) {
+	        lblNoticeAdd1.setText("Invalid serial number input");
+	        return;
+	    }
+	
+		
+			
+			sameSNList = toyStorageDB.compareSNToAllToys(sn); //a list containing an item with the same serial number
+			if (!sameSNList.isEmpty()) {
+				lblNoticeAdd1.setText("Serial Number must be unique!!"); // Calls menu class now for sn situation.
+				return;
+			}
+			
+		 toyType = toyStorageDB.getToyType(sn); //takes in the serial number and checks for specific type of toy
+		 if (!(categoryCB1.getValue().toLowerCase().equals(toyType.toLowerCase()))){
+				
+			switch(categoryCB1.getValue().toLowerCase()) {
+    	        case "figure":
+    	        	lblNoticeAdd1.setText("Serial Number must start with: 0 or 1 "); 
+    	            break;
+    	        case "animal":
+    	        	lblNoticeAdd1.setText("Serial Number must start with: 2 or 3 "); 
+    	            break;
+    	        case "puzzle":
+    	        	lblNoticeAdd1.setText("Serial Number must start with: 4, 5, or 6  "); 
+    	            break;
+    	        case "boardgame":
+    	        	lblNoticeAdd1.setText("Serial Number must start with: 7, 8, or 9 "); 
+    	            break;
+    	    }
+				return;
+		 } 
+	
+		 
+
+
+		 
+
+			 
+		 
 		/*
 		 * create the toy type by using the toy data from user
 		 */
 		if(toyType.equals("Figure")) { 
 			// prompts to ask for toy data to feed into a specific create[TOY TYPE] method
-			toyStorageDB.createFigure(askFigureData(userSerialNumber)); 
+			
+			toyStorageDB.createFigure(askFigureData(sn, name, brand, price, count, age)); 
 		}
 		
 		else if(toyType.equals("Animal") ){ 
 			// prompts to ask for toy data to feed into a specific create[TOY TYPE] method
-			toyStorageDB.createAnimal(askAnimalData(userSerialNumber));
+		    String material = animalMaterialTF.getText().trim();
+		    if(material.isEmpty()) {
+		    		lblNoticeAdd1.setText("Invalid Animal input: This MAterial field is empty");
+		    		return;
+		    }
+
+			toyStorageDB.createAnimal(askAnimalData(sn, name, brand, price, count, age, material));
 		}
 		
 		else if(toyType.equals("Puzzle") ){ 
 			// prompts to ask for toy data to feed into a specific create[TOY TYPE] method
-			toyStorageDB.createPuzzle(askPuzzleData(userSerialNumber));
+
+			toyStorageDB.createPuzzle(askPuzzleData(sn, name, brand, price, count, age));
 		}
 		
 		else if(toyType.equals("BoardGame") ){ 
 			// prompts to ask for toy data to feed into a specific create[TOY TYPE] method
+			
+		    
+		    String minPlayers;
+	        try {
+	            int minNum =Integer.parseInt(bgMinTF.getText().trim()) ;
+	           
+	            if (minNum >= 1) {
+	            	minPlayers = Integer.toString(minNum);
+	            } else {
+	            	lblNoticeAdd1.setText("Invalid Board Game input: Must have at least 1 player");
+	            	return;
+	                
+	            }
+	        } catch (Exception e) {
+	        	lblNoticeAdd1.setText("Invalid Board Game input: minimum player field must be a number");
+            	return;
+
+	        }
+	        
+		    String maxPlayers;
+		    try {
+	            int maxNum = Integer.parseInt(bgMaxTF.getText().trim()) ;
+	          
+	            if (maxNum >= 1) {
+	            	maxPlayers = Integer.toString(maxNum);
+	            } else {
+	            	lblNoticeAdd1.setText("Invalid Board Game input: Must have at least 1 player!");
+	               return;
+	            }
+	        } catch (Exception e) {
+	        	lblNoticeAdd1.setText("Invalid Board Game input: Input must be a number");
+	            return;
+
+	        }
+		    
+		    String designers = bgDesignersTF.getText().trim();
+		    if(designers.isEmpty()) {
+		    		lblNoticeAdd1.setText("Invalid BoardGame input: The Designer field is empty");
+		    		return;
+		    }
+			
 			try {
-				toyStorageDB.createBoardGame(askBoardGameData(userSerialNumber));
+				toyStorageDB.createBoardGame(askBoardGameData(sn, name, brand, price, count, age, minPlayers, maxPlayers, designers));
 			} catch (InvalidPlayersException e) {
-				// TODO Auto-generated catch block
 				
-				menu.errorMessage("\n"+ e.getMessage() + " Returning to main menu");
+				lblNoticeAdd1.setText("Minimum number of players cannot be more than Maximumnumbers of players");
 				return;
 			}
 		}
 		
-		menu.toyAddMessage();
-		menu.pressEnter();
+	 	toyStorageDB.saveData();
+		lblNoticeAdd1.setText( "Toy successfully ADDED");
+
 		
 	}
 	
@@ -280,21 +443,11 @@ public class toyJavaFxController {
 	 * @return an array with the data to create a boardgame
 	 * @throws InvalidPlayersException when minplayer is more than maxplayer
 	 */
-	private String[] askBoardGameData(String serialNum) throws InvalidPlayersException {
+	private String[] askBoardGameData(String serialNum,String name,String brand,String price,String count,String age, String minPlayers, String maxPlayers, String designers) throws InvalidPlayersException {
 
-		String name = menu.askNameInput();
-	    String brand = menu.askBrandInput();
-	    String price = Double.toString(menu.askPriceInput()) ;
-	    String count = Integer.toString(menu.askCountInput()) ;
-	    String age = Integer.toString(menu.askAgeInput()) ;
-	    
-	    String minPlayers = Integer.toString(menu.askMinPlayersInput());
-	    String maxPlayers = Integer.toString(menu.askMaxPlayersInput());
 	    if( Integer.parseInt(minPlayers)>Integer.parseInt(maxPlayers)) {
 	    		throw new InvalidPlayersException("Minimum number of players cannot be more than Maximumnumbers of players"); //throws an exception
 	    }
-	    
-	    String designers = menu.askDesignerNamesInput();
 
 	    return new String[]{serialNum, name, brand, price, count, age, minPlayers + "-" + maxPlayers, designers};
 	}
@@ -305,14 +458,19 @@ public class toyJavaFxController {
 	 * @param serialNum  the serial number that the user wants for the new Puzzle
 	 * @return  an array with the data to create a new puzzle toy
 	 */
-	private String[] askPuzzleData(String serialNum) {
+	private String[] askPuzzleData(String serialNum,String name,String brand,String price,String count,String age) {
 
-		String name = menu.askNameInput();
-	    String brand = menu.askBrandInput();
-	    String price = Double.toString(menu.askPriceInput()) ;
-	    String count = Integer.toString(menu.askCountInput()) ;
-	    String age = Integer.toString(menu.askAgeInput()) ;
-	    String puzzleType = Character.toString(menu.askPuzzleTypeInput());
+//		String name = menu.askNameInput();
+//	    String brand = menu.askBrandInput();
+//	    String price = Double.toString(menu.askPriceInput()) ;
+//	    String count = Integer.toString(menu.askCountInput()) ;
+//	    String age = Integer.toString(menu.askAgeInput()) ;
+	    
+	    
+		String puzzleType = Character.toString(cbTypePuzzle.getValue().toLowerCase().charAt(0));
+   	 if(puzzleType.equals("m") || puzzleType.equals("c") || puzzleType.equals("l") || puzzleType.equals("t") || puzzleType.equals("r") ) {
+
+   	 }
 
 	    return  new String[] {serialNum, name, brand, price, count, age, puzzleType};
 	}
@@ -323,16 +481,17 @@ public class toyJavaFxController {
 	 * @param serialNum  the serial number that the user wants for the new Animal toy
 	 * @return  an array with the data to create a new animal toy
 	 */
-	private String[] askAnimalData(String serialNum) {
+	private String[] askAnimalData(String serialNum,String name,String brand,String price,String count,String age, String material) {
 	
-		
-		String name = menu.askNameInput();
-	    String brand = menu.askBrandInput();
-	    String price = Double.toString(menu.askPriceInput()) ;
-	    String count = Integer.toString(menu.askCountInput()) ;
-	    String age = Integer.toString(menu.askAgeInput()) ;
-	    String material = menu.askMaterialInput();
-	    String size = Character.toString(menu.askSizeInput()) ;
+	
+	    
+	   
+	    
+		String size =Character.toString(cbSizeAnimal.getValue().toLowerCase().charAt(0)) ;
+    	if (size.equals("s")|| size.equals("m") || size.equals("l")) {
+    		
+    	}
+ 
 
 	    return new String[] {serialNum, name, brand, price, count, age, material, size};
 	}
@@ -343,17 +502,19 @@ public class toyJavaFxController {
 	 * @param serialNum  the serial number that the user wants for the new Figure toy
 	 * @return  an array with the data to create a new Figure toy
 	 */
-	private String[] askFigureData(String serialNum) {
+	private String[] askFigureData(String serialNum,String name,String brand,String price,String count,String age) {
 	
 		
-	    String name = menu.askNameInput();
-	    String brand = menu.askBrandInput();
-	    double price = menu.askPriceInput();
-	    int count = menu.askCountInput();
-	    int age = menu.askAgeInput();
-	    char classification = menu.askClassificationInput();
+
 	    
-	    return new String[] {serialNum, name, brand, Double.toString(price), Integer.toString(count), Integer.toString(age), Character.toString(classification)};
+	    
+	    char classification = cbClassFig.getValue().toLowerCase().charAt(0);
+    	if(classification == 'a' || classification == 'd' || classification == 'h' ) {
+    		
+    	}
+
+	    
+	    return new String[] {serialNum, name, brand, price, count, age, Character.toString(classification)};
 	}
 
 	/**
@@ -362,32 +523,42 @@ public class toyJavaFxController {
 	 * It first asks for a serial number then validates if that serial number matcher with any serial number in the database.
 	 * The index of the matching toy with the same serial number is then located in the database and removes that object in that index
 	 */
-	private void removeToy() {
-		int indexInDataBase ;
-		String userSerialNumber; 
-		ArrayList<Toy> sameSNList;
+	private void removeToy( String serialNumber) {
+		int indexInDataBase;
+		if (sameSNList != null )sameSNList.clear();
+        try {
+            
+            if (serialNumber.isEmpty()) {
+                lblErrorRemove.setText("Please enter a serial number.");
+                return;
+            }
+
+            Long snLong = Long.parseLong(serialNumber);
+    
+            if(!(Long.toString(snLong).length() == 10)) {
+            	lblErrorRemove.setText("Invalid input: must have 10 digits");
+			} else lblErrorRemove.setText( "Error: Item Not in DataBase");
+
+
+        } catch (Exception e) {
+        	lblErrorRemove.setText( "Invalid input: Input must be a number or must be 10 long");
+
+        }
+
+	    
+	    String userSerialNumber = serialNumber.trim();
+	    sameSNList = toyStorageDB.compareSNToAllToys(userSerialNumber);
+	    
+
+	    
+	    // Display the toy 
+	    if (sameSNList.isEmpty()) {
+	    	toyListView.getItems().clear();
+	    	return;
+	    }
+		lblErrorRemove.setText( "");
+	    displayToy(sameSNList.get(0));
 		
-		while (true){ 
-			
-			userSerialNumber = menu.askSerialNumber();
-			if(userSerialNumber.isEmpty()) return;
-	
-			sameSNList = toyStorageDB.compareSNToAllToys(userSerialNumber); //a list containing an item with the same serial number // null is placeholder for userinput for SN
-			if (sameSNList.isEmpty()) menu.toyNotFound(); // now calls menu class
-			
-			else break;
-		}
-
-		displayToy(sameSNList.get(0)); //gets the toy object and displays it to user
-		boolean wantToRemove = menu.askToRemove(); //ask if the user wants to remove it
-		if (wantToRemove) {
-			indexInDataBase = toyList.indexOf(sameSNList.get(0)); //get the object in the sameSNList and get the index for that object within the data base arraylist of toys
-			toyList.remove(indexInDataBase); //get the arraylist containing the toys and remove that toy from there
-			menu.displayItemRemoved(); //now calls the appropriate menu class menu
-		}
-
-		menu.pressEnter();
-		return;
 	}
 	
 	/**
@@ -460,7 +631,9 @@ public class toyJavaFxController {
 	 * @param singleToy A single toy that will be displayed as a Toy class
 	 */
 	private void displayToy(Toy singleToy) {
-		menu.displaySingleToy(singleToy);// now calls MENU CLASS
+		toyListView.getItems().clear();
+		toyListView.getItems().add(singleToy.toString());
+		
 		
 	}
 	
@@ -688,13 +861,8 @@ public class toyJavaFxController {
 		return maxPrice;
 	}
 	
-
-
 	
-	
-	
-	
-	
+    // ===================== FXML FIELDS (FROM SCENE BUILDER) =====================
 
     @FXML
     private TextField ageTF;
@@ -722,9 +890,22 @@ public class toyJavaFxController {
 
     @FXML
     private ComboBox<String> categoryCB;
+    
+    @FXML
+    private ComboBox<String> categoryCB1;
 
     @FXML
-    private ComboBox<?> categoryCB1;
+    private ComboBox<String> cbClassFig;
+
+    @FXML
+    private ComboBox<String> cbMaterialAnimal;
+
+    @FXML
+    private ComboBox<String> cbSizeAnimal;
+
+    @FXML
+    private ComboBox<String> cbTypePuzzle;
+
 
     @FXML
     private TextField countTF;
@@ -735,6 +916,12 @@ public class toyJavaFxController {
     @FXML
     private Label lblErrorGift;
 
+    @FXML
+    private Label lblErrorRemove;
+    
+    @FXML
+    private Label lblNoticeAdd1;
+    
     @FXML
     private ListView<String> listViewGift;
 
@@ -759,6 +946,19 @@ public class toyJavaFxController {
     @FXML
     private TextField serialTF;
 
+
+    @FXML
+    private AnchorPane paneAnimal;
+
+    @FXML
+    private AnchorPane paneBg;
+
+    @FXML
+    private AnchorPane paneFigure;
+
+    @FXML
+    private AnchorPane panePuzzle;
+    
     @FXML
     private Tab tabp1;
 
@@ -785,29 +985,103 @@ public class toyJavaFxController {
 
     @FXML
     private ListView<String> toyListView;
+
+    // ========= HOME TAB CONTROLS (ADDED) =========
+
+    /** Radio button option to search by serial number on the Home tab. */
+    @FXML
+    private RadioButton rbSerial;
+
+    /** Radio button option to search by name on the Home tab. */
+    @FXML
+    private RadioButton rbName;
+
+    /** Radio button option to search by type on the Home tab. */
+    @FXML
+    private RadioButton rbType;
+
+    /** Text field for entering the serial number search on the Home tab. */
+    @FXML
+    private TextField txtSerialHome;
+
+    /** Text field for entering the name search on the Home tab. */
+    @FXML
+    private TextField txtNameHome;
+
+    /** Text field for entering the type search on the Home tab. */
+    @FXML
+    private TextField txtTypeHome;
+
+    /** Button for searching on the Home tab. */
+    @FXML
+    private Button btnSearchHome;
+
+    /** Button for clearing search fields on the Home tab. */
+    @FXML
+    private Button btnClearHome;
+
+    /** Button for buying a selected toy on the Home tab. */
+    @FXML
+    private Button btnBuy;
+
+    /** List view that displays toys on the Home tab. */
+    @FXML
+    private ListView<String> listViewHome; //kokokko
+    private ArrayList<Toy> homeSearchList;
+    
     
     
 	
-	@FXML
-	private void initialize() {
-		categoryCB.getItems().addAll("Animal", "BoardGames", "Figure", "Puzzle", "");
-		categoryCB.setValue("");
-	}
-    
     @FXML
-    
+    private void initialize() {
+		paneFigure.setDisable(true);
+		
+		panePuzzle.setDisable(true);
+		paneBg.setDisable(true);
+        categoryCB.getItems().addAll("Animal", "BoardGames", "Figure", "Puzzle", "");
+        categoryCB.setValue("");
+        
+        categoryCB1.getItems().addAll("Animal", "BoardGame", "Figure", "Puzzle");
+        categoryCB1.setValue("Animal");
+        
+        cbClassFig.getItems().addAll("Action", "Doll", "Historic");
+        cbClassFig.setValue("Action");
+        
+        cbSizeAnimal.getItems().addAll("Small", "Medium", "Large");
+        cbSizeAnimal.setValue("Small");
+        
+        cbTypePuzzle.getItems().addAll("Mechanical", "Cryptic", "Logic", "Trivia", "Riddle");
+        cbTypePuzzle.setValue("Mechanical");
+        
+        
+        // ========= HOME TAB INITIAL SETUP =========
+        // Show all toys in the Home list view when the GUI starts
+        if (toyList != null && listViewHome != null) {
+            listViewHome.getItems().clear();
+            homeSearchList = new ArrayList<Toy>();
+
+            for (Toy toy : toyList) {
+                listViewHome.getItems().add(toy.toString());
+                homeSearchList.add(toy);
+            }
+        }
+        
+        
+    }
+
+    @FXML
     void submitGift(ActionEvent event) {
     	String typeInput;
     	//String giftAge, String typeInput, String minPriceInput, String maxPriceInput
     	
-
     
-    if (categoryCB.getValue() == null) {// if its empty or user chooses none
-    		 typeInput = "";
-    }
-    else typeInput = categoryCB.getValue().toString();
+        if (categoryCB.getValue() == null) {
+        	// if its empty or user chooses none
+    		typeInput = "";
+        }
+        else typeInput = categoryCB.getValue().toString();
     
-    giftSuggestion(tfAge.getText(), typeInput, tfMinPrice.getText(), tfMaxPrice.getText());
+        giftSuggestion(tfAge.getText(), typeInput, tfMinPrice.getText(), tfMaxPrice.getText());
     }
     
     @FXML
@@ -833,6 +1107,263 @@ public class toyJavaFxController {
     	submitGift(event);
     	
     }
-	
+    
+    /**
+     * Handles the Search button on the Home tab.
+     *
+     * This method reuses the same logic as the console program:
+     * - If "Serial Number" is selected, it searches using compareSNToAllToys.
+     * - If "Name" is selected, it searches using compareNameToAllToys.
+     * - If "Type" is selected, it converts F/A/P/B to the full type
+     *   and searches using compareTypeToAllToys.
+     *
+     * The results are stored in homeSearchList and displayed in the
+     * Home tab list view as strings from Toy.toString().
+     *
+     * @param event the ActionEvent generated by clicking the Search button
+     */
+    @FXML
+    private void onSearchHome(ActionEvent event) {
+
+        // Clear old results
+        listViewHome.getItems().clear();
+        homeSearchList = new ArrayList<Toy>();
+
+        ArrayList<Toy> snList;
+
+        // === Search by Serial Number ===
+        if (rbSerial.isSelected()) {
+            String userSerialNumber = txtSerialHome.getText().trim();
+            if (userSerialNumber.isEmpty()) {
+                // same idea as console: just warn and stop
+                menu.invalidMessage("Serial Number field is empty");
+                return;
+            }
+
+            snList = toyStorageDB.compareSNToAllToys(userSerialNumber);
+
+            if (snList.isEmpty()) {
+                menu.toyNotFound();
+                return;
+            }
+
+            homeSearchList = snList;
+        }
+
+        // === Search by Name ===
+        else if (rbName.isSelected()) {
+            String toyName = txtNameHome.getText().trim();
+            if (toyName.isEmpty()) {
+                menu.invalidMessage("Name field is empty");
+                return;
+            }
+
+            snList = toyStorageDB.compareNameToAllToys(toyName);
+
+            if (snList.isEmpty()) {
+                menu.toyNotFound();
+                return;
+            }
+
+            homeSearchList = snList;
+        }
+
+        // === Search by Type ===
+        else if (rbType.isSelected()) {
+            String toyType = txtTypeHome.getText().trim().toLowerCase();
+            if (toyType.isEmpty()) {
+                menu.invalidMessage("Type field is empty");
+                return;
+            }
+
+            // Same mapping as findUsingType in ToyStoreManager
+            if (toyType.equals("b")) toyType = "BoardGames";
+            else if (toyType.equals("f")) toyType = "Figure";
+            else if (toyType.equals("a")) toyType = "Animal";
+            else if (toyType.equals("p")) toyType = "Puzzle";
+
+            snList = toyStorageDB.compareTypeToAllToys(toyType);
+
+            if (snList.isEmpty()) {
+                menu.toyNotFound();
+                return;
+            }
+
+            homeSearchList = snList;
+        }
+
+        // Show whatever is in homeSearchList in the Home ListView
+        for (Toy toy : homeSearchList) {
+            listViewHome.getItems().add(toy.toString());
+        }
+    }
+
+
+    /**
+     * Handles the Clear button on the Home tab.
+     *
+     * This method clears the three search text fields and repopulates
+     * the Home list view with the full toy list from toyList.
+     *
+     * @param event the ActionEvent generated by clicking the Clear button
+     */
+    @FXML
+    private void onClearHome(ActionEvent event) {
+        // Clear text fields
+        txtSerialHome.clear();
+        txtNameHome.clear();
+        txtTypeHome.clear();
+
+        // Reset search list to all toys
+        listViewHome.getItems().clear();
+        homeSearchList = new ArrayList<Toy>();
+
+        for (Toy toy : toyList) {
+            listViewHome.getItems().add(toy.toString());
+            homeSearchList.add(toy);
+        }
+    }
+
+
+    /**
+     * Handles the Buy button on the Home tab.
+     *
+     * This method:
+     *  - Gets the selected row in the Home list view
+     *  - Uses homeSearchList to find the matching Toy object
+     *  - Calls the existing purchase(Toy) method
+     *  - Saves the data back to the file using toyStorageDB.saveData()
+     *  - Refreshes the Home list view to reflect updated counts
+     *
+     * @param event the ActionEvent generated by clicking the Buy button
+     */
+    @FXML
+    private void onBuy(ActionEvent event) {
+
+        int selectedIndex = listViewHome.getSelectionModel().getSelectedIndex();
+
+        if (selectedIndex < 0) {
+            // No selection
+            menu.invalidMessage("No toy selected to purchase");
+            return;
+        }
+
+        if (homeSearchList == null || selectedIndex >= homeSearchList.size()) {
+            menu.invalidMessage("Selected index is out of range");
+            return;
+        }
+
+        // Get the Toy the user chose
+        Toy selectedToy = homeSearchList.get(selectedIndex);
+
+        // Reuse your existing purchase logic from the console version
+        purchase(selectedToy);
+
+        // Save changes to the file
+        toyStorageDB.saveData();
+
+        // Refresh the Home list so the new stock count shows
+        listViewHome.getItems().clear();
+        for (Toy toy : homeSearchList) {
+            listViewHome.getItems().add(toy.toString());
+        }
+    }
+    
+    @FXML
+    private Button btnSearchRemove;
+    
+    @FXML
+    private ListView<String> listViewRemove;
+    @FXML
+    private TextField tfSearchRemove;
+   
+
+    @FXML
+    private void searchRemove(ActionEvent event) {
+        
+        
+        String serialNumber = removeSerialTF.getText().trim();
+       
+	        try {
+	            
+	            if (serialNumber.isEmpty()) {
+	                lblErrorRemove.setText("Please enter a serial number.");
+	                return;
+	            }
+
+	            Long snLong = Long.parseLong(serialNumber);
+	    
+	            if(!(Long.toString(snLong).length() == 10)) {
+	            	lblErrorRemove.setText("Invalid input: must have 10 digits");
+				}
+
+
+	        } catch (Exception e) {
+	        	lblErrorRemove.setText( "Invalid input: Input must be a number or must be 10 long");
+
+	        }
+	        
+	        removeToy(removeSerialTF.getText().trim());
+    }
+    
+    @FXML
+    private void submitRemove(ActionEvent event) {
+    	Toy selectedToy =null;
+    	int selected =toyListView.getSelectionModel().getSelectedIndex();
+    	try {
+    		 selectedToy = sameSNList.get(selected);
+		} catch (IndexOutOfBoundsException e) {
+			lblErrorRemove.setText("Error: no items selected");
+			
+			return;
+			
+		} catch (NullPointerException e) {
+			lblErrorRemove.setText("Error: no items selected");
+
+			return;
+		}
+    	
+    	lblErrorRemove.setText("SUCCESSFULLY REMOVED ITEM");
+    	int indexInDataBase ;
+    	indexInDataBase = toyList.indexOf(sameSNList.get(0)); //get the object in the sameSNList and get the index for that object within the data base arraylist of toys
+	toyList.remove(indexInDataBase); //get the arraylist containing the toys and remove that toy from there
+    	toyStorageDB.saveData();
+    	searchRemove(event);
+    }
+    
+    
+    @FXML
+    void enableToy(ActionEvent event) {
+    	//disable all the panes first and then enamble them later
+    			paneFigure.setDisable(true);
+    			paneAnimal.setDisable(true);
+    			panePuzzle.setDisable(true);
+    			paneBg.setDisable(true);
+    			
+
+    			animalMaterialTF.setText("");
+    			bgMinTF.setText("");
+    			bgMaxTF.setText("");
+    			bgDesignersTF.setText("");
+    			
+
+    			
+    
+    			switch(categoryCB1.getValue().toLowerCase()) {
+    	        case "figure":
+    	        	paneFigure.setDisable(false);
+    	            break;
+    	        case "animal":
+    	        	paneAnimal.setDisable(false);
+    	            break;
+    	        case "puzzle":
+    	        	panePuzzle.setDisable(false);
+    	            break;
+    	        case "boardgame":
+    	        	paneBg.setDisable(false);
+    	            break;
+    	    }
+    	
+    }
     
 }

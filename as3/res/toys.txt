@@ -222,7 +222,16 @@
 1396272830;Power Rangers;Game Mach;277.40;12;5;A
 1778180329;George Washington;Gamegenix;192.31;12;8;H
 4662861666;Acrostic;Game Pixel;70.84;11;9;T
-1111111111;abcd;abcd;222222.00;1212;99;A
 7777777777;abcd;abcd;1212.00;121212;12;12-23;Steve Jobs, Pikachu
 7777777778;blood;hasbruh;67.00;67;67;41-67;bruv, blud
 1111111133;w;w;12.00;1;1;H
+1111111111;fds;wqe;12.00;12;12;A
+0000000000;erere;erer;12.00;12;12;A
+0000000001;erere;erer;12.00;12;12;A
+0000000007;erere;erer;12.00;12;12;A
+0000000003;erere;erer;12.00;12;12;D
+0000000303;erere;erer;22.00;12;12;H
+4333333333;eeeee;eeeeeeee;333.00;444;2;M
+1222222222;ttt;tttttttt;55.00;555;55;A
+2444444444;qqqq;qqqqq;23.00;23;23;darkmater;S
+9222222222;ttttttttt;ereree;3322.00;11;4;11-13;rrrrrpooopp
